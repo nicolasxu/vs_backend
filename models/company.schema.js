@@ -1,0 +1,86 @@
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;;
+var Promise = require('bluebird');
+var sanitizer = require('sanitizer');
+
+
+mongoose.Promise = Promise;
+
+var companySchema = new Schema ({
+	name: String,
+	createdBy: ObjectId, // _id	
+	created: String,
+	updated: String,
+	emails: [String], // notification email address
+	members: [ObjectId], // contains all members, including the creator
+	creator: ObjectId,
+	vendors: [ObjectId],
+	clients: [ObjectId],
+	active: Boolean // set in active will not receive invoice and other request
+});
+
+
+companySchema.methods.isNameValid = function () {
+	// sanitize it first
+	this.name = sanitizer.sanitize(this.name);
+
+	if (this.name && this.name.length > 0) {
+		return true; 
+	} else {
+		return false; 
+	}
+}
+
+companySchema.methods.isUserInOtherCompany = function (userId) {
+	// determine if the current session user is in other company
+	var userOid = mongoose.Types.ObjectId(userId);
+
+	var Company = this.model('Company');
+	return Company.findOne({members: {'$in': [userOid]}})
+		.then(function(result) {
+			if(result) {
+				return true;
+			} else {
+				return false; 
+			}
+		})
+}
+
+companySchema.methods.createCompany = function (userId) {
+	// create company
+	var companyJson = this.toJSON();
+	var userOid = mongoose.Types.ObjectId(userId);
+	var Company = this.model('Company');
+	companyJson.members = [userOid];
+	companyJson.creator = userOid;
+	companyJson.active = true; 
+	return Company.create(companyJson);
+	
+}
+
+companySchema.methods.createClient = function (userId) {
+	// 1. get current user's company
+	var Company = this.model('Company');
+	var clientJson = this.toJSON();
+	var myCompany = '';
+	return Company.findOne({members: {$in: [userId]}})
+		.then(function(myCompanyResult) {
+			// my company exists
+			clientJson.vendors = [myCompanyResult._id];
+			myCompany = myCompanyResult;
+			clientJson.creator = userId;
+			clientJson.active = true;
+			return Company.create(clientJson);
+		})
+		.then(function(clientCompanyResult) {
+			myCompany.clients.push(clientCompanyResult._id);
+			return myCompany.save(function(err, company) {
+				return company;
+			});
+		});
+}
+
+
+
+module.exports = companySchema;
