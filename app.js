@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session'); // added
 var RedisStore = require('connect-redis')(session); // added
-
+var cors = require('cors');
 var bodyParser = require('body-parser');
 require('./db.connection.js').connect(); // added
 var app = express();
@@ -34,6 +34,7 @@ app.use(session({
   secret: '0FFD9D8D-78F1-4A30-9A4E-0940ADE81111',
   cookie: {path: '/', maxAge: 3600000}
 }));
+app.use(cors()); // Warning: enable cross origin request for all requests
 app.use('/', routes); // added, need to apply routes after body parser, after session setup
 
 
