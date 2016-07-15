@@ -3,6 +3,7 @@ module.exports = isLogin;
 var messages = require('./messages.js');
 
 function isLogin(req, res, next) {
+	console.log(req.session);
 	if(req.session && req.session.authenticated) {
 		return next();
 	} else {

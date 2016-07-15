@@ -42,6 +42,7 @@ function mountRoutes (router) {
 
 	router.delete('/credential', function (req, res, next){
 		req.session.authenticated = false;
+		req.session.user = {};
 		console.log('removing session data...');
 		console.log('sessionId: ' + req.sessionID);
 		res.status(200).json(messages.userLogoutSuccess);

@@ -4,6 +4,7 @@ module.exports = {
 	weakPassword: {code: 4003, message: "password does not meet min requirement"},
 	unknownError: {code: 4004, message: "create user failed, unknown error"},
 	createUserSuccess: {code: 2000, message: "Account successfully created"},
+	getUserSuccess: {code: 2000, message: "Get user info success"},
 	// login
 	userNotExist: {code: 4005, message: "User doesn't exist"},
 	unknownLoginError: {code: 4006, message: "Login error"}, 
