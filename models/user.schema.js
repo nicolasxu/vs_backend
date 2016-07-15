@@ -82,7 +82,7 @@ userSchema.methods.createUser = function () {
 			userJson.password = hash;
 			return User.update({email: userJson.email}, userJson, {upsert: true});
 		})
-}
+} 
 
 userSchema.methods.login = function () {
 	// check valid before calling this method
@@ -90,7 +90,10 @@ userSchema.methods.login = function () {
 	// TODO: find user in database first
 	var User = this.model('User');
 	return User.findOne({email:userJson.email})
-		.then(function(oneUser) {
+		.then(function(oneUser) { 
+			if(!oneUser) {
+				return false; 
+			}
 			var promise = new Promise(function(resolve, reject) {
 				bcrypt.compare(userJson.password, oneUser.password, function(err, res) {
 					if(err) {
