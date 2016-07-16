@@ -11,7 +11,7 @@ function mountRoutes (router) {
 
 		// 1. validate email
 		if(!user.isEmailValid()) {
-			res.status(200).json(messages.invalidEmail);
+			res.set('Access-Control-Allow-Credentials','true').json(messages.invalidEmail);
 			return;
 		}
 		// 2. login
@@ -24,11 +24,11 @@ function mountRoutes (router) {
 					copyMsg.user = result;
 					req.session.user = result;
 					req.session.authenticated = true; 
-					res.status(200).json(copyMsg);
+					res.set('Access-Control-Allow-Credentials','true').status(200).json(copyMsg);
 					return;
 				}
 				if(result === false) {
-					res.status(200).json(messages.passwordNotMatch);
+					res.set('Access-Control-Allow-Credentials','true').json(messages.passwordNotMatch);
 					return;
 				}
 			});
@@ -37,7 +37,7 @@ function mountRoutes (router) {
 	router.get('/credential', function(req, res, next){
 
 		req.session.counter = 1;
-		res.status(200).json({msg: "success"});
+		res.set('Access-Control-Allow-Credentials','true').json({msg: "success"});
 	});
 
 	router.delete('/credential', function (req, res, next){
@@ -45,7 +45,7 @@ function mountRoutes (router) {
 		req.session.user = {};
 		console.log('removing session data...');
 		console.log('sessionId: ' + req.sessionID);
-		res.status(200).json(messages.userLogoutSuccess);
+		res.set('Access-Control-Allow-Credentials','true').json(messages.userLogoutSuccess);
 		
 
 	});
