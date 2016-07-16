@@ -44,13 +44,13 @@ function mountRoutes (router) {
 		User.findOne({_id: req.session.user._id})
 			.then(function(oneUser) {
 				if(!oneUser) {
-					res.set('Access-Control-Allow-Credentials','true').status(200).json(messages.userNotExist);
-					return;
+					res.status(200).json(messages.userNotExist);
+					return; 
 				}
 				var returnJson = _.cloneDeep(messages.getUserSuccess);
 				returnJson.user = oneUser.toJSON();
 				delete returnJson.user.password;
-				res.set('Access-Control-Allow-Credentials','true').status(200).json(returnJson);
+				res.status(200).json(returnJson);
 				return;
 			});
 	})

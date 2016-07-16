@@ -34,8 +34,16 @@ app.use(session({
   }),
   secret: '0FFD9D8D-78F1-4A30-9A4E-0940ADE81111',
   cookie: {path: '/', maxAge: 3600000}
-}));
-app.use(cors({origin:'http://localhost:8080'})); // Warning: enable cross origin request for all requests
+})); // 'http://localhost:8080'
+
+app.use(cors({origin: true, 
+  methods: ['GET','PUT','POST','OPTIONS','DELETE'], 
+  credentials: true,
+  preflightContinue: true
+})); 
+  // Warning: enable cross origin request for all requests
+
+
 app.use('/', routes); // added, need to apply routes after body parser, after session setup
 
 
