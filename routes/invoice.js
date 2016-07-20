@@ -18,31 +18,27 @@ function mountRoutes(router) {
 		// example request:
 		var requestExample = {
 			from: {
-				cid: '5783cde408ab45f80fb2090d', // no need to send to server, server will fill it
-				cName: 'my own company', // no need to send to server, server will fill it
-				uid: '5783caf2aeb2e9e8b7d2cc1c', // no need to send to server, server will fill it
-				uEmail: 'xu.shenxin@gmail.com', // if not present, server will fill it
-				uName: '' // no need to send to server
+			
 			},
 			to: {
 				cid: '5783ce6d08ab45f80fb2090e', // required
-				cName: 'client no 1' // no need to send to server, server will fill it
 			}, 
 			amount: 1234.58, // required
-			sendDate: '1468257963013', // July 11, required
 			dueDate: '1470888000000', // Aug 11, required
 			isPaid: false,  // server will fill it if not present
 			settled: false, // no need to send to server
 			invoiceRender: '<h3>You own me $1234.58, due on Aug 11, 2016</h3>' // required
 		}
 		var jj = JSON.stringify(requestExample);
+		// you can use jj in advanced client request
+
 		var invoiceJson = {};
 		if(req.body.from) {
 			invoiceJson.from = req.body.from;
 		}
 		invoiceJson.amount = req.body.amount;
 		invoiceJson.to = req.body.to;
-		invoiceJson.sendDate = req.body.sendDate;
+		
 		invoiceJson.dueDate = req.body.dueDate;
 		invoiceJson.invoiceRender = req.body.invoiceRender;
 		if(typeof req.body.isPaid === 'boolean') {
@@ -83,8 +79,39 @@ function mountRoutes(router) {
 			.catch(function(){});
 
 		// step 2: fill 
-
-
-		
 	});
+
+	router.get('/invoice/sent', checkLogin, function (req, res, next){
+		// Only support 'offset' in the query string
+		/*
+		// GET /search?q=tobi+ferret
+		req.query.q
+		// => "tobi ferret"
+		*/
+
+		var pageSize = 50;
+
+		var pageOffset = 0;
+		var qPageOffset = parseInt(req.query.offset);
+		if(qPageOffset.toString() !== "NaN") {
+			if(qPageOffset > 0) {
+				pageOffset = qPageOffset;
+			}
+		}
+
+		var invoice = new Invoice();
+		invoice.getList({sent: true } ,pageSize, pageOffset, req.session)
+			.then(function(results){
+				console.log(results);
+				var msgJson = _.cloneDeep(messages.getInvoiceListSuccess);
+				msgJson.invoices = results;
+				res.status(200).json(msgJson);
+			});
+	});
+
+	router.get('/invoice/received', function(req, res, next) {
+
+	});
+
+
 } 

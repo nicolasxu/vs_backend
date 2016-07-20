@@ -25,7 +25,7 @@ var invoiceSchema = new Schema ({
 	sendDate: String,
 	dueDate: String,
 	invoiceRender: String, // contain html and style for rendered invoice
-	isPaid: Boolean,
+	isPaid: Boolean, // is fully paid
 	paidDate: String,
 	paidAmount: Number, // invoice can be partially paid
 	settled: Boolean // invoice can be partilly paid and settled
@@ -52,6 +52,7 @@ invoiceSchema.methods.fillFrom = function (user) {
 	}
 
 	this.from.uid = user._id;
+
 	if(!this.from.uEmail) {
 		this.from.uEmail = user.email;
 	}
@@ -83,5 +84,46 @@ invoiceSchema.methods.fillTo = function () {
 invoiceSchema.methods.send = function () {
 	return this.save();
 }
+
+invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, session) {
+
+	var Invoice = this.model('Invoice');
+	var cid = session.company._id;
+	console.log(cid);
+	var option = {};
+	if(searchOption.sent === true) {
+
+		option["from.cid"] = cid;
+	} else {
+
+		option["to.cid"] = cid;
+	}
+	console.log(option);
+	return Invoice.find(option)
+		.select('from to amount sendDate dueDate isPaid paidDate paidAmount settled')
+		.skip(pageSize * pageOffset)
+		.limit(pageSize);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -2,6 +2,8 @@ var User = require('../models/').User;
 var messages = require('./messages.js');
 var _ = require('lodash');
 var cors = require('cors');
+var Company = require('../models').Company;
+
 module.exports = {mountTo: mountRoutes};
 
 function mountRoutes (router) {
@@ -17,20 +19,24 @@ function mountRoutes (router) {
 		// 2. login
 		user.login()
 			.then(function(result) {
-				if(result) {
-					// if login success, result contains the user details json,
-					// or result is false
-					var copyMsg = _.cloneDeep(messages.userLoginSuccess);
-					copyMsg.user = result;
-					req.session.user = result;
-					req.session.authenticated = true; 
-					res.status(200).json(copyMsg);
-					return;
-				}
-				if(result === false) {
+				return result;
+			})
+			.then(function(user) {
+				if(!user) {
 					res.status(200).json(messages.passwordNotMatch);
 					return;
 				}
+				Company.findOne({members: {$in: [user._id]}})
+					.then(function(myCompany){
+						req.session.user = user;
+						req.session.company = myCompany;
+						req.session.authenticated = true;
+						var copyMsg = _.cloneDeep(messages.userLoginSuccess);
+						copyMsg.user = user;
+						copyMsg.company = myCompany;
+						res.status(200).json(copyMsg);
+						return;
+					});
 			});
 	});
 
@@ -44,6 +50,7 @@ function mountRoutes (router) {
 	router.delete('/credential', function (req, res, next){
 		req.session.authenticated = false;
 		req.session.user = {};
+		req.session.company = {};
 		res.status(200).json(messages.userLogoutSuccess);
 		
  
