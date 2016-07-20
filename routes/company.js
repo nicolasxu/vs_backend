@@ -15,7 +15,11 @@ function mountRoutes(router) {
 				if(isInOtherCompany === false ) {
 					return company.createCompany(req.session.user._id)
 						.then(function (result) {
-							res.status(200).json(messages.createCompanySuccess);
+							console.log(result);
+							// result contains the company created. 
+							var msgJson = _.cloneDeep(messages.createCompanySuccess);
+							msgJson.company = result;
+							res.status(200).json(msgJson);
 						});	
 				} else {
 					res.status(200).json(messages.userHasCompanyAlready);

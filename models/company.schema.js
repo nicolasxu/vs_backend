@@ -9,6 +9,14 @@ mongoose.Promise = Promise;
 
 var companySchema = new Schema ({
 	name: String,
+	addressLine1: String,
+	addressLine2: String,
+	city: String,
+	state: String,
+	zip: String,
+	country: String,
+	tel: String,
+	eid: String, // EID or SSN
 	createdBy: ObjectId, // _id	
 	created: String,
 	updated: String,
