@@ -102,7 +102,7 @@ function mountRoutes(router) {
 		var invoice = new Invoice();
 		invoice.getList({sent: true } ,pageSize, pageOffset, req.session)
 			.then(function(results){
-				console.log(results);
+
 				var msgJson = _.cloneDeep(messages.getInvoiceListSuccess);
 				msgJson.invoices = results;
 				res.status(200).json(msgJson);

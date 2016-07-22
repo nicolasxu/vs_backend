@@ -89,7 +89,7 @@ invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, se
 
 	var Invoice = this.model('Invoice');
 	var cid = session.company._id;
-	console.log(cid);
+
 	var option = {};
 	if(searchOption.sent === true) {
 
