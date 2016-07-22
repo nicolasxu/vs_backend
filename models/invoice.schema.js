@@ -20,16 +20,16 @@ var invoiceSchema = new Schema ({
 		cid: ObjectId, // company id of receiver company
 		cName: String  // receiver company name
 
-	},  
+	},
+	invoiceNumber: Number,
 	amount: Number, 
 	sendDate: String,
 	dueDate: String,
 	invoiceRender: String, // contain html and style for rendered invoice
+	status: String, // 'sent', 'viewed', 'declined', 'avoided', 'pending' 'paid', 'partial', 'settled' , 'failed'
 	isPaid: Boolean, // is fully paid
 	paidDate: String,
-	paidAmount: Number, // invoice can be partially paid
-	settled: Boolean // invoice can be partilly paid and settled
-									 // e.g.: $100 amount, paid $25, then it is settled. 
+	paidAmount: Number // invoice can be partially paid
 });
 
 module.exports = invoiceSchema;
@@ -81,6 +81,27 @@ invoiceSchema.methods.fillTo = function () {
 		});
 }
 
+invoiceSchema.methods.fillInvoiceNumber = function () {
+	var thisInvoice = this;
+	var Invoice = this.model('Invoice');
+	console.log('from cid:' + thisInvoice.from.cid);
+	var option = {};
+	option["from.cid"] = thisInvoice.from.cid;
+	return Invoice.count(option)
+		.then(function (count, err) {
+			console.log('count is: ' + count);
+			console.log('err is: ' + err);
+			if(err) {
+				return false;
+			}
+			if(!count) {
+				count = 1;
+			}
+			thisInvoice.invoiceNumber = count + 1;
+			return true; 
+		});
+}
+
 invoiceSchema.methods.send = function () {
 	return this.save();
 }
@@ -98,9 +119,9 @@ invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, se
 
 		option["to.cid"] = cid;
 	}
-	console.log(option);
+	
 	return Invoice.find(option)
-		.select('from to amount sendDate dueDate isPaid paidDate paidAmount settled')
+		.select('from to invoiceNumber status amount sendDate dueDate isPaid paidDate paidAmount')
 		.skip(pageSize * pageOffset)
 		.limit(pageSize);
 

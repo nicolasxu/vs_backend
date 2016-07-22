@@ -25,8 +25,6 @@ function mountRoutes(router) {
 			}, 
 			amount: 1234.58, // required
 			dueDate: '1470888000000', // Aug 11, required
-			isPaid: false,  // server will fill it if not present
-			settled: false, // no need to send to server
 			invoiceRender: '<h3>You own me $1234.58, due on Aug 11, 2016</h3>' // required
 		}
 		var jj = JSON.stringify(requestExample);
@@ -37,9 +35,12 @@ function mountRoutes(router) {
 			invoiceJson.from = req.body.from;
 		}
 		invoiceJson.amount = req.body.amount;
+		invoiceJson.status = 'sent';
+		invoiceJson.sentDate = new Date().getTime();
 		invoiceJson.to = req.body.to;
-		
 		invoiceJson.dueDate = req.body.dueDate;
+		invoiceJson.isPaid = false;
+
 		invoiceJson.invoiceRender = req.body.invoiceRender;
 		if(typeof req.body.isPaid === 'boolean') {
 			invoiceJson.isPaid = req.body.isPaid;
@@ -67,9 +68,16 @@ function mountRoutes(router) {
 					throw new Error();
 				}	
 			})
-			.then(function(){
+			.then(function (){
+				return invoice.fillInvoiceNumber();
+			})
+			.then(function(result){
 				// save invoice
-				return invoice.send();
+				if(result === true) {
+					return invoice.send();
+				} else {
+					throw new Error("Filling invoice number error");
+				}
 			})
 			.then(function(sendResult){
 				console.log(sendResult);
