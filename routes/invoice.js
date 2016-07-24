@@ -98,7 +98,6 @@ function mountRoutes(router) {
 		*/
 
 		var pageSize = 50;
-
 		var pageOffset = 0;
 		var qPageOffset = parseInt(req.query.offset);
 		if(qPageOffset.toString() !== "NaN") {
@@ -118,7 +117,25 @@ function mountRoutes(router) {
 	});
 
 	router.get('/invoice/received', function(req, res, next) {
+		var pageSize = 50;
+		var pageOffset = 0; // offset is page index, [0, 1, 2, ....]
 
+		//parse page number
+		var qPageOffset = parseInt(req.query.offset);
+		if(qPageOffset.toString() !== "NaN") {
+			if(qPageOffset > 0) {
+				pageOffset = qPageOffset;
+			}
+		}
+
+		var invoice = new Invoice();
+		invoice.getList({sent: false } ,pageSize, pageOffset, req.session)
+			.then(function(results){
+
+				var msgJson = _.cloneDeep(messages.getInvoiceListSuccess);
+				msgJson.invoices = results;
+				res.status(200).json(msgJson);
+			});
 	});
 
 

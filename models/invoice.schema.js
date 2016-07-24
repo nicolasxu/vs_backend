@@ -113,10 +113,8 @@ invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, se
 
 	var option = {};
 	if(searchOption.sent === true) {
-
 		option["from.cid"] = cid;
 	} else {
-
 		option["to.cid"] = cid;
 	}
 	
@@ -124,8 +122,6 @@ invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, se
 		.select('from to invoiceNumber status amount sendDate dueDate isPaid paidDate paidAmount')
 		.skip(pageSize * pageOffset)
 		.limit(pageSize);
-
-
 }
 
 

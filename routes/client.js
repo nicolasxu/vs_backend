@@ -8,6 +8,22 @@ module.exports = {mountTo: mountRoutes};
 function mountRoutes(router) {
 	router.get('/client', checkLogin, function(req, res, next){
 		// list all clients
+		var myCid = req.session.company && req.session.company._id;
+
+		if(!myCid) {
+			// my company doesn't exist
+			res.status(200).json(messages.myCompanyNotExist);
+			return;
+		}
+
+		var company = new Company();
+		company.getClients(req.session.company.clients)
+			.then(function (clients) {
+				var msgJson = _.cloneDeep(messages.getClientsSuccess);
+				msgJson.clients = clients;
+
+				res.status(200).json(msgJson);
+			});
 	});
 
 	router.post('/client', checkLogin, function(req, res, next){

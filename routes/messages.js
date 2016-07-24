@@ -24,5 +24,10 @@ module.exports = {
 	receiverNotExist: {code: 4012, message: "Receiver company does not exist"},
 	toCompanyIdNotValid: {code: 4013, message: "Receiver company doesn't exist"},
 	sendInvoiceSuccess: {code: 2000, message: "Send invoice success"},
-	getInvoiceListSuccess: {code: 2000, message: "Get invoice list success"}
+	getInvoiceListSuccess: {code: 2000, message: "Get invoice list success"},
+	// client
+	myCompanyNotExist: {code: 4013, message: "Your company not exist"},
+	getClientsSuccess: {code: 2000, message: "Get client list success"},
+	// vendor
+	getVendorsSuccess: {code: 2000, messages: "Get vendor list success"}
 }

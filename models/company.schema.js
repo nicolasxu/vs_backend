@@ -89,6 +89,17 @@ companySchema.methods.createClient = function (userId) {
 		});
 }
 
+companySchema.methods.getClients = function (clientIds) {
+	var Company = this.model('Company');
+	return Company.find({_id: {$in: clientIds}});
+}
+
+companySchema.methods.getVendors = function (vendorIds) {
+	var Company = this.model('Company');
+	return Company.find({_id: {$in: []}});
+
+}
+
 
 
 module.exports = companySchema;
