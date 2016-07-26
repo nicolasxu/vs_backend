@@ -29,5 +29,9 @@ module.exports = {
 	myCompanyNotExist: {code: 4013, message: "Your company not exist"},
 	getClientsSuccess: {code: 2000, message: "Get client list success"},
 	// vendor
-	getVendorsSuccess: {code: 2000, messages: "Get vendor list success"}
+	getVendorsSuccess: {code: 2000, messages: "Get vendor list success"},
+	// template
+	companyTemplateEmpty: {code: 4014, message: "Company templates are empty"},
+	getTemplatesSuccess: {code: 2000, message: "Get invoice templates success"}
+
 }

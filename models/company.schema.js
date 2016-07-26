@@ -25,6 +25,7 @@ var companySchema = new Schema ({
 	creator: ObjectId,
 	vendors: [ObjectId],
 	clients: [ObjectId],
+	templates: [ObjectId], // array of invoice template id
 	active: Boolean // set in active will not receive invoice and other request
 });
 
@@ -63,6 +64,10 @@ companySchema.methods.createCompany = function (userId) {
 	companyJson.members = [userOid];
 	companyJson.creator = userOid;
 	companyJson.active = true; 
+	var invoiceTemplateId = mongoose.Types.ObjectId('579572800d8bb41654d00b44'); 
+	// TODO: there could be 2 default invoice templates
+	//       or premium user will have its own customized templates
+	companyJson.templates = [invoiceTemplateId];
 	return Company.create(companyJson);
 	
 }

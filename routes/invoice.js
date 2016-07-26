@@ -116,7 +116,7 @@ function mountRoutes(router) {
 			});
 	});
 
-	router.get('/invoice/received', function(req, res, next) {
+	router.get('/invoice/received', checkLogin, function(req, res, next) {
 		var pageSize = 50;
 		var pageOffset = 0; // offset is page index, [0, 1, 2, ....]
 

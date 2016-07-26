@@ -2,11 +2,28 @@ var messages = require('./messages.js');
 var Company = require('../models/index.js').Company;
 var _ = require('lodash');
 var checkLogin = require('./checkLogin.js');
-
+var Template = require('../models/index.js').Template;
 module.exports = {mountTo: mountRoutes }
 
 function mountRoutes(router) {
 	router.get('/vendor', checkLogin, function (req, res, next) {
+
+		/*
+		test
+
+		*/
+
+		var tpl = new Template({
+			name: 'template 1',
+			html: '<h1 id="tpl-headline"> this is template 1</h1',
+			css: '#tpl-headline: background-color: yellow',
+			js:' console.log("js from template")'
+		})
+		tpl.save();
+
+		/////////////////
+
+
 
 		var myCid = req.session.company && req.session.company._id;
 

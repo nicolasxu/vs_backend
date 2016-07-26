@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var userSchema = require('./user.schema.js');
 var companySchema = require('./company.schema.js');
 var invoiceSchema = require('./invoice.schema.js');
-
+var invoiceTemplateSchema = require('./template.schema.js');
 // the logic of mongoose is:
 //   1. use new Schema({}) to create a schema
 //   2. use mongoose.model('ModelName', schema) to create Model
@@ -13,7 +13,8 @@ var invoiceSchema = require('./invoice.schema.js');
 var Models = {
 	User: mongoose.model('User', userSchema),
 	Company: mongoose.model('Company', companySchema),
-	Invoice: mongoose.model('Invoice', invoiceSchema)
+	Invoice: mongoose.model('Invoice', invoiceSchema),
+	Template: mongoose.model('Template', invoiceTemplateSchema)
 }
 
 module.exports = Models;

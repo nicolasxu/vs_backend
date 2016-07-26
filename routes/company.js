@@ -15,7 +15,7 @@ function mountRoutes(router) {
 				if(isInOtherCompany === false ) {
 					return company.createCompany(req.session.user._id)
 						.then(function (result) {
-							console.log(result);
+
 							// result contains the company created. 
 							var msgJson = _.cloneDeep(messages.createCompanySuccess);
 							msgJson.company = result;
