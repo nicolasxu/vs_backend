@@ -35,7 +35,7 @@ companySchema.methods.isNameValid = function () {
 	this.name = sanitizer.sanitize(this.name);
 
 	if (this.name && this.name.length > 0) {
-		return true; 
+		return true;
 	} else {
 		return false; 
 	}
