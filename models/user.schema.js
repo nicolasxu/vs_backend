@@ -53,7 +53,7 @@ userSchema.methods.isEmailValid = function () {
 }
 
 userSchema.methods.isPasswordValid = function () {
-	if(/.{6}/.test(this.password)) {
+	if(/^.{6,}$/.test(this.password)) {
 			return true;
 		} else {
 			return false; 

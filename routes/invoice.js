@@ -80,7 +80,7 @@ function mountRoutes(router) {
 				}
 			})
 			.then(function(sendResult){
-				console.log(sendResult);
+
 				res.status(200).json(messages.sendInvoiceSuccess);
 				return;
 			})

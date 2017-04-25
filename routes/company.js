@@ -37,10 +37,10 @@ function mountRoutes(router) {
 		// var userId = mongoose.Types.ObjectId();
 		Company.findOne({members: {$in: [req.session.user._id]}})
 			.then(function(myCompany) {
-				// console.log(myCompany);
+
 				var jsonResult = _.cloneDeep(messages.getCompanySuccess);
 				jsonResult.company = myCompany;
-				console.log(jsonResult);
+
 				res.status(200).json(jsonResult);
 			});
 	});

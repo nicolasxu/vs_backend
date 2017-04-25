@@ -32,6 +32,9 @@ function mountRoutes(router) {
 		company.createClient(req.session.user._id)
 			.then(function(company) {
 				if(company) {
+					// 1. update session
+					req.session.company = company;
+					// 2. compile and send result
 					var messageJson = _.cloneDeep(messages.createClientSuccess);
 					messageJson.company = company;
 					res.status(200).json(messageJson); 
