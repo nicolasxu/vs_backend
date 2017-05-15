@@ -5,7 +5,7 @@
 - sudo mongod
 
 
-- /Users/shenxinxu/library/redis-3.2.1/src/redis-server
+- redis-server /usr/local/etc/redis.conf
 
 
 

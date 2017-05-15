@@ -1,3 +1,7 @@
+/*
+	After a company is created, go through database 
+	and link email with clients of other companies and replace according private clients
+*/
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;;
