@@ -20,7 +20,7 @@ function mountRoutes(router) {
 		company.getClients(req.session.company.clients)
 			.then(function (clients) {
 				var msgJson = _.cloneDeep(messages.getClientsSuccess);
-				msgJson.clients = clients;
+				msgJson.data.clients = clients;
 
 				res.status(200).json(msgJson);
 			});
@@ -36,7 +36,7 @@ function mountRoutes(router) {
 					req.session.company = company;
 					// 2. compile and send result
 					var messageJson = _.cloneDeep(messages.createClientSuccess);
-					messageJson.company = company;
+					messageJson.data.company = company;
 					res.status(200).json(messageJson); 
 				} else {
 					res.status(200).json(messages.createClientError);

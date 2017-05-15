@@ -111,7 +111,7 @@ function mountRoutes(router) {
 			.then(function(results){
 
 				var msgJson = _.cloneDeep(messages.getInvoiceListSuccess);
-				msgJson.invoices = results;
+				msgJson.data.invoices = results;
 				res.status(200).json(msgJson);
 			});
 	});

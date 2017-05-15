@@ -37,7 +37,7 @@ function mountRoutes(router) {
 		company.getVendors(req.session.company.vendors)
 			.then(function (vendors) {
 				var msgJson = _.cloneDeep(messages.getVendorsSuccess);
-				msgJson.vendors = vendors;
+				msgJson.data.vendors = vendors;
 				res.status(200).json(msgJson);
 			})
 			.catch(function(err) {

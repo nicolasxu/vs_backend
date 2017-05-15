@@ -5,9 +5,9 @@ var messages = require('../messages.js')
 var checkLogin = require('./checkLogin.js')
 var _ = require('lodash')
 
-module.exports = loginHandler
+module.exports = registerUser
 
-function loginHandler(req, res, next) {
+function registerUser(req, res, next) {
 
   var user = new User ({email: req.body.email, password: req.body.password});
 

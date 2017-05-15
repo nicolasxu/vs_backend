@@ -17,7 +17,7 @@ function mountRoutes (router) {
 		Template.find({_id: {$in: tplIds}})
 			.then(function(templates) {
 				var jsonMsg = _.cloneDeep(messages.getTemplatesSuccess);
-				jsonMsg.templates = templates;
+				jsonMsg.data.templates = templates;
 				res.status(200).json(jsonMsg); 
 			});
 	});

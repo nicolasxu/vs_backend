@@ -2,9 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 require('./user').mountTo(router)
+require('./credential').mountTo(router)
+require('./company').mountTo(router)
 
-require('./credential.js').mountTo(router);
-require('./company.js').mountTo(router);
+// require('./credential.js').mountTo(router);
+// require('./company.js').mountTo(router);
 require('./client.js').mountTo(router);
 require('./invoice.js').mountTo(router);
 require('./vendor.js').mountTo(router);

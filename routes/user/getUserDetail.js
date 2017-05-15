@@ -14,7 +14,7 @@ function getUserDetail(req, res, next) {
         return; 
       }
       var returnJson = _.cloneDeep(messages.getUserSuccess);
-      returnJson.user = oneUser.toJSON();
+      returnJson.data.user = oneUser.toJSON();
       delete returnJson.user.password;
       res.status(200).json(returnJson);
       return;
