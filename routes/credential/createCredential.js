@@ -1,15 +1,15 @@
 // create credential
 
-var User = require('../models/').User;
+var User = require('../../models/').User;
 var _ = require('lodash');
 var cors = require('cors');
-var Company = require('../models').Company;
+var Company = require('../../models').Company;
 var messages = require('../messages.js');
 
 module.exports = createCredential
 
 function createCredential (req, res, next) {
-
+  console.log(req.body)
   var user = User({email: req.body.email, password: req.body.password});
 
   // 1. validate email
@@ -33,8 +33,8 @@ function createCredential (req, res, next) {
           req.session.company = myCompany;
           req.session.authenticated = true;
           var copyMsg = _.cloneDeep(messages.userLoginSuccess);
-          copyMsg.user = user;
-          copyMsg.company = myCompany;
+          copyMsg.data.user = user;
+          copyMsg.data.company = myCompany;
           res.status(200).json(copyMsg);
           return;
         });

@@ -1,7 +1,7 @@
-var User = require('../models/').User;
+var User = require('../../models/').User;
 var _ = require('lodash');
 var cors = require('cors');
-var Company = require('../models').Company;
+var Company = require('../../models').Company;
 var messages = require('../messages.js');
 
 module.exports = deleteCredential

@@ -14,3 +14,5 @@
   or 
   npm run debug 
   
+- node-debug ./bin/www
+  for debug
