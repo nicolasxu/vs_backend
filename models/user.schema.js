@@ -82,6 +82,8 @@ userSchema.methods.createUser = function () {
 			userJson.password = hash;
 			return User.update({email: userJson.email}, userJson, {upsert: true});
 		})
+		// todo: find newly created user, 
+		//       return user record without password
 } 
 
 userSchema.methods.login = function () {

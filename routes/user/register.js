@@ -10,7 +10,7 @@ module.exports = registerUser
 function registerUser(req, res, next) {
 
   var user = new User ({email: req.body.email, password: req.body.password});
-
+  console.log(user)
   // 1. validate email
   if(!user.isEmailValid()) {
     res.status(200).json(messages.invalidEmail);
@@ -30,7 +30,8 @@ function registerUser(req, res, next) {
       } else {
         user.createUser()
           .then (function(result) {
-            
+              console.log('create user success', result)
+              // todo: login user, return newly created user data
               res.status(200).json(messages.createUserSuccess);
               return;
             }
