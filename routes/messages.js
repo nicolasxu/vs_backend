@@ -28,6 +28,12 @@ module.exports = {
 			message: "Account successfully created"
 		}
 	},
+	createUserError: {
+		code: 4014,
+		data: {
+			message: "Register User error"
+		}
+	},
 	getUserSuccess: {
 		code: 2000, 
 		data: {

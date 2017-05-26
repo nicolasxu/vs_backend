@@ -31,11 +31,44 @@ function registerUser(req, res, next) {
         user.createUser()
           .then (function(result) {
               console.log('create user success', result)
-              // todo: login user, return newly created user data
-              res.status(200).json(messages.createUserSuccess);
-              return;
+              //res.status(200).json(messages.createUserSuccess);
+              /*
+              { n: 1, nModified: 1, ok: 1 }
+              */
+              if (result.ok === 1) {
+                // succeed
+                return user.email
+              } else {
+                return ''
+              }
             }
           )
+          .then ((userEmail) => {
+            if (userEmail) {
+              // find one, return user detail
+              User.findOne({email: userEmail})
+                .then((oneUser) => {
+                  if(!oneUser) {
+                    res.status(200).json(messages.createUserError)
+                    return
+                  } else {
+                    let returnJson = _.cloneDeep(messages.createUserSuccess)
+                    returnJson.data.user = oneUser.toJSON()
+                    delete returnJson.data.user.password
+                    // login user by setting session
+                    req.session.user = oneUser
+                    req.session.authenticated = true
+
+                    res.status(200).json(returnJson)
+                    return
+                  }
+                })
+            } else {
+              // return error msg
+              res.status(200).json(messages.createUserError)
+              return
+            }
+          }) 
       }
     })
 }
