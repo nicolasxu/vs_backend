@@ -21,12 +21,12 @@ var companySchema = new Schema ({
 	country: String,
 	tel: String,
 	eid: String, // EID or SSN
-	createdBy: ObjectId, // _id	
+	creator: ObjectId,
 	created: String,
 	updated: String,
 	emails: [String], // notification email address
 	members: [ObjectId], // contains all members, including the creator
-	creator: ObjectId,
+	
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
@@ -78,8 +78,49 @@ companySchema.methods.createCompany = function (userId) {
 	return Company.create(companyJson);
 	
 }
+companySchema.statics.addClient = function (userCompanyId, clientId) {
+	// add clientId to be the client of user company
+	// 1. create request records, 
+	//
+}
 
-companySchema.methods.createClient = function (userId) {
+companySchema.statics.createClientRequest = function (to_id, from_id) {
+
+}
+
+companySchema.statics.createVendorRequest = function (to_id, from_id) {
+
+}
+
+companySchema.statics.approveRejectClient = function () {
+
+}
+
+companySchema.statics.approveRejectVendor = function () {
+
+}
+
+companySchema.methods.createClient = function (clientJson) {
+	// 1. create a company record
+	// 2. add newly created id to user's company client list
+	// 3. return created client. 
+	var Company = this.model('Company')
+	var thisCompany = this
+
+
+	return Company.create(clientJson)
+		.then(function (client) {
+			thisCompany.clients.push(client._id)
+			return Company.findByIdAndUpdate(thisCompany._id, {clients: thisCompany.clients}, {new: true})
+				.then (function (updatedCompany) {
+					return {updatedCompanyModel: updatedCompany, createdClient: client}
+				})
+		})
+}
+
+
+
+companySchema.methods.createClient__ = function (userId) {
 	// 1. get current user's company
 	var Company = this.model('Company');
 	var clientJson = this.toJSON();
