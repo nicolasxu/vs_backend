@@ -30,7 +30,9 @@ var companySchema = new Schema ({
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
-	active: Boolean // set in active will not receive invoice and other request
+	active: Boolean, // set in active will not receive invoice and other request
+	public: Boolean  // company created by real user are public company, 
+									 // or it is private, cannot be searched, added to client or vendor
 });
 
 
@@ -67,7 +69,8 @@ companySchema.methods.createCompany = function (userId) {
 	var Company = this.model('Company');
 	companyJson.members = [userOid];
 	companyJson.creator = userOid;
-	companyJson.active = true; 
+	companyJson.active = true;
+	companyJson.public = true;
 	var invoiceTemplateId = mongoose.Types.ObjectId('579572800d8bb41654d00b44'); 
 	// TODO: there could be 2 default invoice templates
 	//       or premium user will have its own customized templates

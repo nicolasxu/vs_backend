@@ -153,6 +153,18 @@ module.exports = {
 			message: "Get client list success"
 		}
 	},
+	findPublicCompanyErr: {
+		code: 4015,
+		data: {
+			message: "Find Active companies error"
+		}
+	},
+	findPublicCompanySucceed: {
+		code: 2000,
+		data: {
+			message: "Find public companies succeed"
+		}
+	},
 	// vendor
 	getVendorsSuccess: {
 		code: 2000, 
