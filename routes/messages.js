@@ -109,6 +109,12 @@ module.exports = {
 			message: "Create Client Success"
 		}
 	},
+	addClientRequestSuccess: {
+		code: 2000,
+		data: {
+			message: "Add client request created successfully"
+		}
+	},
 	// invoice
 	companyIdNotValid: {
 		code: 4011, 

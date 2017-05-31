@@ -31,8 +31,10 @@ var companySchema = new Schema ({
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
 	active: Boolean, // set in active will not receive invoice and other request
-	public: Boolean  // company created by real user are public company, 
+	public: Boolean,  // company created by real user are public company, 
 									 // or it is private, cannot be searched, added to client or vendor
+	clientRequestsReceived: [{}],
+	vendorRequestsReceived: [{}]
 });
 
 
@@ -84,7 +86,18 @@ companySchema.statics.addClient = function (userCompanyId, clientId) {
 	//
 }
 
-companySchema.statics.createClientRequest = function (to_id, from_id) {
+companySchema.methods.createClientRequest = function (clientReqest) {
+	/* request object {
+		from_cid: '43243243',
+		from_cname: "abc company",
+		status: "pending"
+		created: "3232323232" // milli second
+	}
+	*/
+	clientReqest.status = 'pending'
+	clientReqest.created = new Date().getTime()
+	var Company = this.model('Company')
+	return Company.findByIdAndUpdate(clientReqest.to_cid, {$push: {clientRequestsReceived: clientReqest}}, {new: true})
 
 }
 
@@ -107,11 +120,10 @@ companySchema.methods.createClient = function (clientJson) {
 	var Company = this.model('Company')
 	var thisCompany = this
 
-
 	return Company.create(clientJson)
 		.then(function (client) {
 			thisCompany.clients.push(client._id)
-			return Company.findByIdAndUpdate(thisCompany._id, {clients: thisCompany.clients}, {new: true})
+			return Company.findByIdAndUpdate(thisCompany._id, {clients: thisCompany.clients}, {new: true}) // new: true, return updated document
 				.then (function (updatedCompany) {
 					return {updatedCompanyModel: updatedCompany, createdClient: client}
 				})
