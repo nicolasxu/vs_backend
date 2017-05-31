@@ -80,39 +80,6 @@ companySchema.methods.createCompany = function (userId) {
 	return Company.create(companyJson);
 	
 }
-companySchema.statics.addClient = function (userCompanyId, clientId) {
-	// add clientId to be the client of user company
-	// 1. create request records, 
-	//
-}
-
-companySchema.methods.createClientRequest = function (clientReqest) {
-	/* request object {
-		from_cid: '43243243',
-		from_cname: "abc company",
-		status: "pending"
-		created: "3232323232" // milli second
-	}
-	*/
-	clientReqest.status = 'pending'
-	clientReqest.created = new Date().getTime()
-	var Company = this.model('Company')
-	return Company.findByIdAndUpdate(clientReqest.to_cid, {$push: {clientRequestsReceived: clientReqest}}, {new: true})
-
-}
-
-companySchema.statics.createVendorRequest = function (to_id, from_id) {
-
-}
-
-companySchema.statics.approveRejectClient = function () {
-
-}
-
-companySchema.statics.approveRejectVendor = function () {
-
-}
-
 companySchema.methods.createClient = function (clientJson) {
 	// 1. create a company record
 	// 2. add newly created id to user's company client list
@@ -129,6 +96,59 @@ companySchema.methods.createClient = function (clientJson) {
 				})
 		})
 }
+companySchema.methods.createClientRequest = function (clientReqest) {
+	/* request object {
+		to_cid: '3232k3'
+		from_cid: '43243243',
+		from_cname: "abc company",
+		status: "pending"
+		created: "3232323232" // milli second
+	}
+	*/
+	clientReqest.status = 'pending'
+	clientReqest.created = new Date().getTime()
+	var Company = this.model('Company')
+	return Company.findByIdAndUpdate(clientReqest.to_cid, {$push: {clientRequestsReceived: clientReqest}}, {new: true})
+
+}
+
+companySchema.statics.createVendorRequest = function (vendorRequest) {
+	/*
+	{	
+		to_cid: 'dfsfdsfds',
+		from_cid: '43243243',
+		from_cname: "abc company",
+		status: "pending"
+		created: "3232323232" // milli second
+	}
+	*/
+	vendorRequest.status = 'pending'
+	vendorRequest.created = new Date().getTime()
+	var Company = this.model('Company')
+	return Company.findByIdAndUpdate(vendorRequest.to_cid, {$push: {vendorRequestsReceived: vendorRequest}}, {new: true})
+
+}
+
+companySchema.statics.approveRejectClient = function (to_cid, from_cid, isApproved) {
+	// validation should all be done in route
+
+	if (isApproved) {
+		// 1. add from_cid to to_cid vendor list
+
+		// 2. add to_cid to from_cid client list
+
+		// 3. return to_cid updated company document		
+	} else {
+		
+	}
+
+}
+
+companySchema.statics.approveRejectVendor = function () {
+
+}
+
+
 
 
 

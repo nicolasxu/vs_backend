@@ -5,7 +5,19 @@ var _ = require('lodash')
 module.exports = createOrAddClient
 
 function createOrAddClient(req, res, next) {
+
+  // 1. make sure my company exists
+  if(!req.session.company) {
+    res.status(200).json(messages.myCompanyNotExist)
+    return
+  }
+
   if (req.body.to_cid) {
+
+    // 1. make sure you can only send request on behalf of you
+    if (req.session.company._id !== req.body.from_cid) {
+      res.status(200).json(messages.fromCompanyIdNotValid)
+    }
     var myCompany = new Company(req.session.company)
     myCompany.createClientRequest({
       to_cid: req.body.to_cid,
@@ -13,7 +25,7 @@ function createOrAddClient(req, res, next) {
       from_cname: req.session.company.name
     })
     .then(function (updated) {
-      console.log(updated)
+      
       var returnJson = messages.addClientRequestSuccess
       
       res.status(200).json(returnJson)

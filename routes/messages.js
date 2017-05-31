@@ -115,6 +115,12 @@ module.exports = {
 			message: "Add client request created successfully"
 		}
 	},
+	fromCompanyIdNotValid: {
+		code: 4016,
+		data: {
+			message: "From company id is not valid"
+		}
+	},
 	// invoice
 	companyIdNotValid: {
 		code: 4011, 
