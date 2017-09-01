@@ -4,22 +4,23 @@ var ObjectId = Schema.Types.ObjectId;
 var bcrypt = require('bcryptjs');
 var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
+var _ = require('lodash')
 
 mongoose.Promise = Promise;
 
 var userSchema = new Schema ({
 	email: String, 
 	password: String,
-	created_company_id: ObjectId, // _id
-	belong_company_id: ObjectId,  // _id
-	created: String, 
-	updated: String,
-	active: Boolean
+	role: String,
+	active: Boolean,
+	firstName: String,
+	lastName: String,
+	updatedAt: String,
 });
 
-userSchema.methods.isRegisteredAlready = function () {
+userSchema.statics.isRegisteredAlready = function (user) {
 	var User = this.model('User'); // get the model 
-	var email = this.email;
+	var email = user.email;
 	var isRegistered = false; 
 
 	var promise = new Promise(function(resolveFunc, rejectFunc){
@@ -39,37 +40,37 @@ userSchema.methods.isRegisteredAlready = function () {
 	return promise;
 }
 
-userSchema.methods.isEmailValid = function () {
-	if (this.email != sanitizer.sanitize(this.email)) {
+userSchema.statics.isEmailValid = function (email) {
+	if (email != sanitizer.sanitize(email)) {
 		// dirty
 		return false; 
 	}
 
-	if( /^\S+@\S+\.\S+$/.test(this.email)) {
+	if( /^\S+@\S+\.\S+$/.test(email)) {
 			return true;
 		} else {
 			return false; 
 	}	
 }
 
-userSchema.methods.isPasswordValid = function () {
-	if(/^.{6,}$/.test(this.password)) {
+userSchema.statics.isPasswordValid = function (password) {
+	if(/^.{6,}$/.test(password)) {
 			return true;
 		} else {
 			return false; 
 		}
 }
 
-userSchema.methods.createUser = function () {
+userSchema.statics.createUser = function (userInput) {
 	// only safe to run after making sure it is new user, 
-	// or it will overwrite existing user. 
-	var userJson = this.toJSON();
-	delete userJson._id;
-	userJson.active = false;
+	// or it will overwrite existing user.
+	var user = _.clone(userInput)
+	delete user._id;
+	user.active = false;
 	var User = this.model('User');
 
 	var promise = new Promise(function(resolveFunc, rejectFunc) {
-		bcrypt.hash(userJson.password, 8, function(err, hash) {
+		bcrypt.hash(user.password, 8, function(err, hash) {
 			if(err) {
 				rejectFunc(err);
 			} else {
@@ -79,16 +80,16 @@ userSchema.methods.createUser = function () {
 	});
 	return promise
 		.then(function(hash) {
-			userJson.password = hash;
-			return User.update({email: userJson.email}, userJson, {upsert: true});
+			user.password = hash;
+			return User.update({email: user.email}, user, {upsert: true});
 		})
 		// todo: find newly created user, 
 		//       return user record without password
 } 
 
-userSchema.methods.login = function () {
+userSchema.statics.login = function (user) {
 	// check valid before calling this method
-	var userJson = {email: this.email, password: this.password};
+	var userJson = {email: user.email, password: user.password};
 	// TODO: find user in database first
 	var User = this.model('User');
 	return User.findOne({email:userJson.email})

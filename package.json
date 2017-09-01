@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "supervisor ./bin/www",
-    "ni"   : "node-debug ./bin/www"
-
+    "supervisor": "supervisor ./bin/www",
+    "dev": "supervisor ./bin/www",
+    "debug": "node-debug ./bin/www"
   },
   "dependencies": {
+    "apollo-server-express": "^1.1.2",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.4.1",
     "body-parser": "~1.15.1",
@@ -18,7 +19,10 @@
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "express-session": "^1.14.0",
+    "graphql": "^0.11.1",
+    "graphql-tools": "^1.2.1",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^7.4.3",
     "lodash": "^4.13.1",
     "mongoose": "^4.5.3",
     "morgan": "~1.7.0",

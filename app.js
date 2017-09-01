@@ -8,9 +8,11 @@ var RedisStore = require('connect-redis')(session); // added
 var cors = require('cors');
 var bodyParser = require('body-parser');
 require('./db.connection.js').connect(); // added
+var utils = require('./utils')
 var app = express();
 var routes = require('./routes');
-
+var { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
+var { makeExecutableSchema } = require('graphql-tools')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,12 +46,27 @@ app.use(cors({origin: true,
 })); 
   // Warning: enable cross origin request for all requests
 
-
 app.use('/', routes); // added, need to apply routes after body parser, after session setup
 
-
-
 app.use(express.static(path.join(__dirname, 'public')));
+
+var typeDefs = require('./graphql/types')
+
+var resolvers = {
+  Query: {
+    hello(root) {
+      return 'world'
+    }
+  }
+}
+
+app.use(utils.verifyToken)
+
+var schema = makeExecutableSchema({typeDefs: typeDefs , resolvers: resolvers})
+app.use('/graphql', graphqlExpress({schema}))
+app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

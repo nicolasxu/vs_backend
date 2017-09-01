@@ -9,26 +9,26 @@ module.exports = registerUser
 
 function registerUser(req, res, next) {
 
-  var user = new User ({email: req.body.email, password: req.body.password});
-  console.log(user)
+  var userJson = {email: req.body.email, password: req.body.password}
+  console.log(userJson)
   // 1. validate email
-  if(!user.isEmailValid()) {
+  if(!User.isEmailValid(userJson.email)) {
     res.status(200).json(messages.invalidEmail);
     return;
   }
   // 2. validate password
-  if(!user.isPasswordValid()) {
+  if(!User.isPasswordValid(userJson.password)) {
     res.status(200).json(messages.weakPassword);
     return;
   }
 
   // 3. validate unique email
-  user.isRegisteredAlready()
+  User.isRegisteredAlready(userJson)
     .then(function (isRegistered)  {
       if(isRegistered) {
         res.status(200).json(messages.accountExist);
       } else {
-        user.createUser()
+        User.createUser(userJson)
           .then (function(result) {
               console.log('create user success', result)
               //res.status(200).json(messages.createUserSuccess);
@@ -37,7 +37,7 @@ function registerUser(req, res, next) {
               */
               if (result.ok === 1) {
                 // succeed
-                return user.email
+                return userJson.email
               } else {
                 return ''
               }
@@ -56,8 +56,8 @@ function registerUser(req, res, next) {
                     returnJson.data.user = oneUser.toJSON()
                     delete returnJson.data.user.password
                     // login user by setting session
-                    req.session.user = oneUser
-                    req.session.authenticated = true
+                    //req.session.user = oneUser
+                    //req.session.authenticated = true
 
                     res.status(200).json(returnJson)
                     return
