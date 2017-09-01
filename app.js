@@ -3,8 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var session = require('express-session'); // added
-var RedisStore = require('connect-redis')(session); // added
+
 var cors = require('cors');
 var bodyParser = require('body-parser');
 require('./db.connection.js').connect(); // added
@@ -25,19 +24,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  secure: true,
-  store: new RedisStore({
-    resave: true,
-    saveUninitialized: true,
-    host: 'localhost',
-    port: 6379
-  }),
-  secret: '0FFD9D8D-78F1-4A30-9A4E-0940ADE81111',
-  cookie: {path: '/', maxAge: 3600000}
-})); // 'http://localhost:8080'
+
 
 app.use(cors({origin: true, 
   methods: ['GET','PUT','POST','OPTIONS','DELETE'], 
@@ -46,7 +33,7 @@ app.use(cors({origin: true,
 })); 
   // Warning: enable cross origin request for all requests
 
-app.use('/', routes); // added, need to apply routes after body parser, after session setup
+app.use('/', routes); // added, need to apply routes after body parser
 
 app.use(express.static(path.join(__dirname, 'public')));
 
