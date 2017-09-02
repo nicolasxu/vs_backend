@@ -1,12 +1,11 @@
 var messages = require('./messages.js');
 var Company = require('../models/index.js').Company;
 var _ = require('lodash');
-var checkLogin = require('./checkLogin.js');
 var Template = require('../models/index.js').Template;
 module.exports = {mountTo: mountRoutes }
 
 function mountRoutes(router) {
-	router.get('/vendor', checkLogin, function (req, res, next) {
+	router.get('/vendor', function (req, res, next) {
 
 		/*
 		test

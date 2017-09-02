@@ -2,7 +2,7 @@
 
 var User = require('../../models/').User
 var messages = require('../messages.js')
-var checkLogin = require('./checkLogin.js')
+
 var _ = require('lodash')
 
 module.exports = registerUser

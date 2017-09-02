@@ -1,18 +1,18 @@
 var messages = require('./messages.js');
 // var Company = require('../models/index.js').Company;
 var _ = require('lodash');
-var checkLogin = require('./checkLogin.js');
+
 var Invoice = require('../models/index.js').Invoice;
 
 module.exports = {mountTo: mountRoutes};
 
 
 function mountRoutes(router) {
-	router.get('/invoice', checkLogin, function(req, res, next){
+	router.get('/invoice' , function(req, res, next){
 		// get invoices based on query string
 	});
 
-	router.post('/invoice', checkLogin, function(req, res, next) {
+	router.post('/invoice' , function(req, res, next) {
 		// send invoice
 
 		// example request:
@@ -89,7 +89,7 @@ function mountRoutes(router) {
 		// step 2: fill 
 	});
 
-	router.get('/invoice/sent', checkLogin, function (req, res, next){
+	router.get('/invoice/sent', function (req, res, next){
 		// Only support 'offset' in the query string
 		/*
 		// GET /search?q=tobi+ferret
@@ -116,7 +116,7 @@ function mountRoutes(router) {
 			});
 	});
 
-	router.get('/invoice/received', checkLogin, function(req, res, next) {
+	router.get('/invoice/received', function(req, res, next) {
 		var pageSize = 50;
 		var pageOffset = 0; // offset is page index, [0, 1, 2, ....]
 

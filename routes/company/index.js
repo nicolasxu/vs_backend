@@ -2,7 +2,6 @@
 var createCompany = require('./createCompany.js')
 var updateCompany = require('./updateCompany.js')
 var getCompany = require('./getCompany.js')
-var checkLogin = require('../user/checkLogin.js')
 var searchCompany = require('./searchCompany.js')
 
 var getClients = require('./getClients.js')
@@ -18,20 +17,20 @@ module.exports = {mountTo: mountRoutes}
 
 function mountRoutes(router) {
 
-  router.post('/company', checkLogin, createCompany)
-  router.put('/company', checkLogin, updateCompany)
-  router.get('/company', checkLogin, getCompany)
+  router.post('/company' , createCompany)
+  router.put('/company' , updateCompany)
+  router.get('/company' , getCompany)
   
-  router.get('/company/active', checkLogin, searchCompany)
+  router.get('/company/active' , searchCompany)
 
-  router.get('/company/client', checkLogin, getClients)
-  router.post('/company/client', checkLogin, createClient)
-  router.put('/company/client', checkLogin, updateClient)
-  router.delete('/company/client', checkLogin, deleteClient)
+  router.get('/company/client' , getClients)
+  router.post('/company/client' , createClient)
+  router.put('/company/client' , updateClient)
+  router.delete('/company/client' , deleteClient)
 
-  router.get('/company/vendor', checkLogin, getVendors)
-  router.post('/company/vendor', checkLogin, addVendor)
-  router.delete('/company/vendor', checkLogin, deleteClient)
+  router.get('/company/vendor' , getVendors)
+  router.post('/company/vendor' , addVendor)
+  router.delete('/company/vendor', deleteClient)
 
 
 }

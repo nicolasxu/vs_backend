@@ -1,12 +1,11 @@
 var messages = require('./messages.js');
 var Company = require('../models/index.js').Company;
 var _ = require('lodash');
-var checkLogin = require('./checkLogin.js');
 
 module.exports = {mountTo: mountRoutes};
 
 function mountRoutes(router) {
-	router.get('/client', checkLogin, function(req, res, next){
+	router.get('/client' , function(req, res, next){
 		// list all clients
 		var myCid = req.session.company && req.session.company._id;
 
@@ -26,7 +25,7 @@ function mountRoutes(router) {
 			});
 	});
 
-	router.post('/client', checkLogin, function(req, res, next){
+	router.post('/client' , function(req, res, next){
 		// create a new client
 		var company = new Company({name: req.body.name, emails: req.body.emails});
 		company.createClient(req.session.user._id)
@@ -44,11 +43,11 @@ function mountRoutes(router) {
 			});
 	});
 
-	router.post('/client/request', checkLogin, function(req, res, next){
+	router.post('/client/request' , function(req, res, next){
 		// send request
 	});
 
-	router.put('/client/request', checkLogin, function(req, res, next) {
+	router.put('/client/request' , function(req, res, next) {
 		// approve, or deny request
 	})
 }
