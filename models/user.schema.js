@@ -18,26 +18,19 @@ var userSchema = new Schema ({
 	updatedAt: String,
 });
 
-userSchema.statics.isRegisteredAlready = function (user) {
+userSchema.statics.isRegisteredAlready = async function (user) {
 	var User = this.model('User'); // get the model 
 	var email = user.email;
 	var isRegistered = false; 
 
-	var promise = new Promise(function(resolveFunc, rejectFunc){
-		User.find({email: email, active: true})
-			.then(function(docs, err){
-				if(err) {
-					rejectFunc(err);
-				} else {
-					if(docs.length > 0) {
-						isRegistered = true;
-					}
-					resolveFunc(isRegistered);
-				}
-			});
-	});
+	var docs = await User.find({email: email, active: true})
+	// doc is empty array if no found, or it will be an array with more than 0 item
 
-	return promise;
+	if (docs.length === 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 userSchema.statics.isEmailValid = function (email) {
@@ -61,7 +54,7 @@ userSchema.statics.isPasswordValid = function (password) {
 		}
 }
 
-userSchema.statics.createUser = function (userInput) {
+userSchema.statics.createUser = async function (userInput) {
 	// only safe to run after making sure it is new user, 
 	// or it will overwrite existing user.
 	var user = _.clone(userInput)
@@ -69,54 +62,36 @@ userSchema.statics.createUser = function (userInput) {
 	user.active = false;
 	var User = this.model('User');
 
-	var promise = new Promise(function(resolveFunc, rejectFunc) {
-		bcrypt.hash(user.password, 8, function(err, hash) {
-			if(err) {
-				rejectFunc(err);
-			} else {
-				resolveFunc(hash);
-			}
-		});
-	});
-	return promise
-		.then(function(hash) {
-			user.password = hash;
-			return User.update({email: user.email}, user, {upsert: true});
-		})
-		// todo: find newly created user, 
-		//       return user record without password
-} 
+	let hash = await bcrypt.hash(user.password, 8)
+	user.password = hash
+	return User.update({email: user.email}, user, {upsert: true})
+}
 
-userSchema.statics.login = function (user) {
+userSchema.statics.login = async function (user) {
 	// check valid before calling this method
 	var userJson = {email: user.email, password: user.password};
-	// TODO: find user in database first
-	var User = this.model('User');
-	return User.findOne({email:userJson.email})
-		.then(function(oneUser) { 
-			if(!oneUser) {
-				return false; 
-			}
-			var promise = new Promise(function(resolve, reject) {
-				bcrypt.compare(userJson.password, oneUser.password, function(err, res) {
-					if(err) {
-						reject(err);
-					} else {
-						if(res === true) {
-							var resultJson = oneUser.toJSON();
-							// have to convert to JSON, so that delete will work
-							delete resultJson.password;
+	// find user in database first
+	var User = this.model('User')
 
-							resolve(resultJson);
-						} else {
-							resolve(false);
-						}
-					}
-				});
-			});
-			return promise;
-		});
+	let oneUser = await User.findOne({email:userJson.email, active: true})
+	// oneUser is null if not found
+
+	if (!oneUser) {
+		return false
+	}
+
+	let isPwdRight = await bcrypt.compare(userJson.password, oneUser.password)
+
+	if (!isPwdRight) {
+		return false
+	}
+
+	let oneUserJson = oneUser.toJSON()
+	delete oneUserJson.password
+	return oneUserJson
+	// don't deal token here
 }
+
 
 module.exports = userSchema;
 

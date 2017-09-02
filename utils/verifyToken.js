@@ -11,7 +11,7 @@ function verifyToken(req, res, next) {
   if (token) {
 
     let decoded = jwt.verify(token, config.token_secret)
-    console.log('decoded:', decoded)
+
 
     req.user = decoded
     
