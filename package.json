@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "supervisor": "supervisor ./bin/www",
     "dev": "supervisor ./bin/www",
-    "debug": "node-debug ./bin/www"
+    "debug": "node --inspect ./bin/www"
   },
   "dependencies": {
     "apollo-server-express": "^1.1.2",

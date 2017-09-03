@@ -19,7 +19,7 @@ then C is registered company, no need to register again, and C can see the both 
 
 
 
-Every time a user creates a private company, a email is required field. When user enters the email,
+Every time a user creates a private company, an email is required field. When user enters the email,
 do a search in active company. If match is found, then direct to request page, not private record anymore. 
 
 

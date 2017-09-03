@@ -1,6 +1,7 @@
 
 let jwt = require('jsonwebtoken')
 const config = require('../config/config.js')
+let store = require('./store.js')
 
 module.exports = verifyToken
 
@@ -9,19 +10,26 @@ function verifyToken(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token']
 
   if (token) {
+    let decoded 
+    try {
+      decoded = jwt.verify(token, config.token_secret)
+    } catch (e) {
+      return res.status(403).json({
+        status: false,
+        message: 'Token verification error'
+      })
+    }
 
-    let decoded = jwt.verify(token, config.token_secret)
-
-
-    req.user = decoded
+    store.user = decoded
     
-    next()
+    return next()
 
-  } else {
-    res.status(403).json({
-      status: false,
-      message: 'Can not verify token'
-    })
   }
+
+  res.status(403).json({
+    status: false,
+    message: 'Can not verify token'
+  })
+  
 
 }
