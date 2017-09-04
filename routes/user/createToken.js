@@ -1,5 +1,5 @@
 var User = require('../../models/').User
-var messages = require('../messages.js')
+var message = require('../messages.js')
 
 var _ = require('lodash')
 var jwt = require('jsonwebtoken')
@@ -16,16 +16,13 @@ async function createToken(req, res, next) {
   let result = await User.login(user)
 
   if (!result) {
-    res.status(200).json('token not created')
-
+    // do not execute code after, or there will be exception
+    return res.status(200).json(message.passwordWrong)
   }
 
   // create token
   let token = jwt.sign({data: result}, TOKEN_SECRET, {expiresIn: '1h'} )
-
-  res.json({
-    success: true,
-    message: 'token created',
-    token: token
-  })
+  let msgJson = _.clone(message.createTokenSuccess)
+  msgJson.data.token = token
+  res.json(msgJson)
 }

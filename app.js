@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-app.use(cors({origin: true, 
+app.use(cors({origin: ['http://localhost:8090'], 
   methods: ['GET','PUT','POST','OPTIONS','DELETE'], 
   credentials: true,
   preflightContinue: true
@@ -40,6 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 var typeDef = require('./graphql/types')
 
 var resolver = require('./graphql/resolvers')
+
+// handle the OPTIONS pre-flight
+app.use('/graphql', cors({origin: ['http://localhost:8090']}))
 
 app.use(utils.verifyToken)
 
