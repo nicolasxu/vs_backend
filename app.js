@@ -31,7 +31,6 @@ app.use(cors({origin: ['http://localhost:8090'],
   credentials: true,
   preflightContinue: true
 })); 
-  // Warning: enable cross origin request for all requests
 
 app.use('/', routes); // added, need to apply routes after body parser
 
@@ -46,7 +45,7 @@ app.use('/graphql', cors({origin: ['http://localhost:8090']}))
 
 app.use(utils.verifyToken)
 
-var schema = makeExecutableSchema({typeDefs: typeDef , resolvers: resolver})
+var schema = makeExecutableSchema({typeDefs: typeDef, resolvers: resolver})
 app.use('/graphql', graphqlExpress({schema}))
 app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
 

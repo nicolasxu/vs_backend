@@ -11,11 +11,11 @@ company A, company B, both send invoice to company C's email
 
 C receives 2 invoice from B and A when C open the email box
 C decided to register by clicking link in email, then pay B's invoice
-then C is registered company, no need to register again, and C can see the both B and A's invoice 
+then C is registered company, no need to register again, and C can see the both B and A's invoice
 - right after C is registered, perform
-  0) make sure this email is not registered yet
+  0) make sure this email is not registered as user yet
   1) go through all the private company records, find whose company has this email, then replace this Clien-vendor relationship (create new, remove previous)
-  2) go through all the sent invoices, if the to email(newly registered company cannot sent before, it can only receive) is the to_company email, replace the to company id
+  2) go through all the sent invoices, if the to email(newly registered company cannot sent before, it can only receive) is the to_company email, replace the to_company id
 
 
 

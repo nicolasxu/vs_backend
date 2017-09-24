@@ -5,16 +5,19 @@ type Company {
   name: String
   isPrivate: Boolean
   creator: String
-  invoiceEmail: [String]
-  
+  active: Boolean
+  invoiceEmails: [String]
+  members: [User]
+  templates: [String]
+
   addressLine1: String
   addressLine2: String
   city: String
   state: String
   zip: String
+  country: String
   
-  clients: [Company]
-  vendor: [Company]
+  
   createdAt: String
   updatedAt: String
 }

@@ -9,7 +9,7 @@ const TOKEN_SECRET = require('../../config/config.js').token_secret
 module.exports = createToken
 
 async function createToken(req, res, next) {
-
+  console.log(req.body)
   // 1. login
   let user = {email: req.body.email, password: req.body.password}
 

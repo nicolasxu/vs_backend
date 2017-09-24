@@ -21,24 +21,58 @@ var companySchema = new Schema ({
 	country: String,
 	tel: String,
 	eid: String, // EID or SSN
-	creator: ObjectId,
 	created: String,
 	updated: String,
-	emails: [String], // notification email address
+	invoiceEmails: [String], // notification email address
 	members: [ObjectId], // contains all members, including the creator
-	
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
 	active: Boolean, // set in active will not receive invoice and other request
-	public: Boolean,  // company created by real user are public company, 
-									 // or it is private, cannot be searched, added to client or vendor
-	clientRequestsReceived: [{}],
-	vendorRequestsReceived: [{}]
+	
+	creatorCompanyId: ObjectId, 
+										 // company who create this company, empty if it is active company
+										 // creatorCompanyId will be empty if it is public company
+										 // only private company have this set to creator company id
+	public: Boolean   // true if it is created by user, not belong to other company
+	/* use creatorCompanyId and public fields to determine if public company together */
+
 });
 
+// Can only be used to create my own company, not client or vendor
+companySchema.statics.createMyCompany = async function (companyJson) {
 
-companySchema.methods.isNameValid = function () {
+	if (!companyJson.members || companyJson.members.length < 1) {
+		return
+	}
+	let userId = companyJson.members[0]
+
+	// 1. check if user is in other company
+	let isInOtherCompany = await this.isUserInOtherCompany(userId)
+
+	if (isInOtherCompany) {
+		return 'COMPANY EXIST'
+	}
+
+	// create company
+	var Company = this.model('Company')
+	var userOid = new ObjectId(userId)
+	
+	companyJson.members = [userId];
+	companyJson.active = true;
+	companyJson.public = true;
+	// Use object string string when type is ObjectId, the string will be coerced to Object ID in mongoDB,
+	// if you use a object id type, which is a json object, there will be a validation error
+	var invoiceTemplateId = '579572800d8bb41654d00b44' //new ObjectId('579572800d8bb41654d00b44') 
+	// TODO: there could be 2 default invoice templates
+	//       or premium user will have its own customized templates
+	companyJson.templates = [invoiceTemplateId];
+	companyJson.creatorCompanyId = null
+	console.log('companyJson', companyJson)
+	return Company.create(companyJson)
+}
+
+companySchema.statics.isNameValid = function () {
 	// sanitize it first
 	this.name = sanitizer.sanitize(this.name);
 
@@ -49,38 +83,23 @@ companySchema.methods.isNameValid = function () {
 	}
 }
 
-companySchema.methods.isUserInOtherCompany = function (userId) {
+companySchema.statics.isUserInOtherCompany = async function (userId) {
 	// determine if the current session user is in other company
-	var userOid = mongoose.Types.ObjectId(userId);
+	var userOid = mongoose.Types.ObjectId(userId)
 
-	var Company = this.model('Company');
-	return Company.findOne({members: {'$in': [userOid]}})
-		.then(function(result) {
-			if(result) {
-				return true;
-			} else {
-				return false; 
-			}
-		})
+	var Company = this.model('Company')
+
+	let myCompany = await Company.findOne({members: {'$in': [userOid] }})
+
+	if (myCompany) {
+		return true
+	} else {
+		return false
+	}
 }
 
-companySchema.methods.createCompany = function (userId) {
-	// create company
-	var companyJson = this.toJSON();
-	var userOid = mongoose.Types.ObjectId(userId);
-	var Company = this.model('Company');
-	companyJson.members = [userOid];
-	companyJson.creator = userOid;
-	companyJson.active = true;
-	companyJson.public = true;
-	var invoiceTemplateId = mongoose.Types.ObjectId('579572800d8bb41654d00b44'); 
-	// TODO: there could be 2 default invoice templates
-	//       or premium user will have its own customized templates
-	companyJson.templates = [invoiceTemplateId];
-	return Company.create(companyJson);
-	
-}
-companySchema.methods.createClient = function (clientJson) {
+
+companySchema.statics.createClient = function (clientJson) {
 	// 1. create a company record
 	// 2. add newly created id to user's company client list
 	// 3. return created client. 
@@ -96,7 +115,7 @@ companySchema.methods.createClient = function (clientJson) {
 				})
 		})
 }
-companySchema.methods.createClientRequest = function (clientReqest) {
+companySchema.statics.createClientRequest = function (clientReqest) {
 	/* request object {
 		to_cid: '3232k3'
 		from_cid: '43243243',
@@ -148,43 +167,15 @@ companySchema.statics.approveRejectVendor = function () {
 
 }
 
-
-
-
-
-companySchema.methods.createClient__ = function (userId) {
-	// 1. get current user's company
-	var Company = this.model('Company');
-	var clientJson = this.toJSON();
-	var myCompany = '';
-	return Company.findOne({members: {$in: [userId]}})
-		.then(function(myCompanyResult) {
-			// my company exists
-			clientJson.vendors = [myCompanyResult._id];
-			myCompany = myCompanyResult;
-			clientJson.creator = userId;
-			clientJson.active = true;
-			return Company.create(clientJson);
-		})
-		.then(function(clientCompanyResult) {
-			myCompany.clients.push(clientCompanyResult._id);
-			return myCompany.save(function(err, company) {
-				return company;
-			});
-		});
-}
-
-companySchema.methods.getClients = function (clientIds) {
+companySchema.statics.getClients = function (clientIds) {
 	var Company = this.model('Company');
 	return Company.find({_id: {$in: clientIds}});
 }
 
-companySchema.methods.getVendors = function (vendorIds) {
+companySchema.statics.getVendors = function (vendorIds) {
 	var Company = this.model('Company');
 	return Company.find({_id: {$in: []}});
 
 }
-
-
 
 module.exports = companySchema;

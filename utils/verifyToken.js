@@ -20,7 +20,7 @@ function verifyToken(req, res, next) {
       })
     }
 
-    store.user = decoded
+    store.user = decoded.data
     
     return next()
 
