@@ -15,7 +15,6 @@ async function createMyCompany(obj, args, context, info) {
   let company = args.input
   company.members = [userId]
 
-  
   let result = await Company.createMyCompany(company)
 
   if (result === 'COMPANY EXIST') {

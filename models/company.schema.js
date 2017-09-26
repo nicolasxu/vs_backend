@@ -68,7 +68,7 @@ companySchema.statics.createMyCompany = async function (companyJson) {
 	//       or premium user will have its own customized templates
 	companyJson.templates = [invoiceTemplateId];
 	companyJson.creatorCompanyId = null
-	console.log('companyJson', companyJson)
+	
 	return Company.create(companyJson)
 }
 
@@ -98,7 +98,6 @@ companySchema.statics.isUserInOtherCompany = async function (userId) {
 	}
 }
 
-
 companySchema.statics.createClient = function (clientJson) {
 	// 1. create a company record
 	// 2. add newly created id to user's company client list
@@ -115,6 +114,7 @@ companySchema.statics.createClient = function (clientJson) {
 				})
 		})
 }
+
 companySchema.statics.createClientRequest = function (clientReqest) {
 	/* request object {
 		to_cid: '3232k3'
@@ -145,7 +145,6 @@ companySchema.statics.createVendorRequest = function (vendorRequest) {
 	vendorRequest.created = new Date().getTime()
 	var Company = this.model('Company')
 	return Company.findByIdAndUpdate(vendorRequest.to_cid, {$push: {vendorRequestsReceived: vendorRequest}}, {new: true})
-
 }
 
 companySchema.statics.approveRejectClient = function (to_cid, from_cid, isApproved) {
@@ -160,7 +159,6 @@ companySchema.statics.approveRejectClient = function (to_cid, from_cid, isApprov
 	} else {
 		
 	}
-
 }
 
 companySchema.statics.approveRejectVendor = function () {

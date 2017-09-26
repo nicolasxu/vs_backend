@@ -5,8 +5,6 @@ module.exports = `
 
 input CompanyInput {
 
-  
-  _id: String
   name: String
   invoiceEmails: [String]
   addMembers: [String]
@@ -16,9 +14,7 @@ input CompanyInput {
   state: String
   zip: String
   country: String
-
   eid: String
-
 
 }
 

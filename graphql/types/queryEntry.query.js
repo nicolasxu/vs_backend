@@ -6,7 +6,9 @@ type Query {
   user: User
   
   clients: CompanyList
+  clientDetail: Company
   vendors: CompanyList
+  vendorDetail: Company
   myCompany: Company
   
   
