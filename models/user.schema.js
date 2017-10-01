@@ -5,6 +5,7 @@ var bcrypt = require('bcryptjs');
 var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
 var _ = require('lodash')
+var mongoosePaginate = require('mongoose-paginate')
 
 mongoose.Promise = Promise;
 
@@ -92,6 +93,6 @@ userSchema.statics.login = async function (user) {
 	// don't deal token here
 }
 
-
+userSchema.plugin(mongoosePaginate)
 module.exports = userSchema;
 

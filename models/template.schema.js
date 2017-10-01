@@ -6,6 +6,7 @@ var ObjectId = Schema.Types.ObjectId;
 var bcrypt = require('bcryptjs');
 var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
+var mongoosePaginate = require('mongoose-paginate')
 
 mongoose.Promise = Promise;
 
@@ -21,7 +22,7 @@ var templateSchema = new Schema ({
 });
 
 
-
+templateSchema.plugin(mongoosePaginate)
 
 module.exports = templateSchema;
 

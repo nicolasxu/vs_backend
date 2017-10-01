@@ -9,6 +9,7 @@ var sanitizer = require('sanitizer');
 mongoose.Promise = Promise;
 var companySchema = require('./company.schema.js');
 var Company = mongoose.model('Company', companySchema);
+var mongoosePaginate = require('mongoose-paginate')
 
 
 var invoiceSchema = new Schema ({
@@ -35,7 +36,7 @@ var invoiceSchema = new Schema ({
 	paidAmount: Number // invoice can be partially paid
 });
 
-module.exports = invoiceSchema;
+
 
 invoiceSchema.methods.isReceiverIdValid = function () {
 	var idRegex = /^[0-9a-fA-F]{24}$/;
@@ -127,23 +128,5 @@ invoiceSchema.methods.getList = function (searchOption, pageSize, pageOffset, se
 		.limit(pageSize);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+invoiceSchema.plugin(mongoosePaginate)
+module.exports = invoiceSchema;

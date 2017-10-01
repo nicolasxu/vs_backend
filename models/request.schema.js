@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;;
 var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
+var mongoosePaginate = require('mongoose-paginate')
 
 mongoose.Promise = Promise;
 
@@ -57,6 +58,6 @@ requestSchema.statics.listSent = function (my_cid, option) {
   }
 }
 
-
+requestSchema.plugin(mongoosePaginate)
 
 module.exports = requestSchema

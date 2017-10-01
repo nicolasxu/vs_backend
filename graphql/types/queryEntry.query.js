@@ -5,12 +5,12 @@ type Query {
   hello: String
   user: User
   
-  clients: CompanyList
+  clients(offset: Int, limit: Int): CompanyList
   clientDetail: Company
-  vendors: CompanyList
+  vendors(offset: Int, limit: Int): CompanyList
   vendorDetail: Company
   myCompany: Company
-  
+ 
   
   
 }
