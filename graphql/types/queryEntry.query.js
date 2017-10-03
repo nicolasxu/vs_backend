@@ -7,6 +7,7 @@ type Query {
   
   clients(offset: Int, limit: Int): CompanyList
   clientDetail: Company
+  
   vendors(offset: Int, limit: Int): CompanyList
   vendorDetail: Company
   myCompany: Company

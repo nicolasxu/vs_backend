@@ -3,7 +3,7 @@ module.exports = `
 type Company {
   _id: String
   name: String
-  isPrivate: Boolean
+  public: Boolean
   creator: String
   active: Boolean
   invoiceEmails: [String]
@@ -16,7 +16,7 @@ type Company {
   state: String
   zip: String
   country: String
-  
+  tel: String
   
   createdAt: String
   updatedAt: String

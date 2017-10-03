@@ -15,6 +15,7 @@ input CompanyInput {
   zip: String
   country: String
   eid: String
+  tel: String
 
 }
 
