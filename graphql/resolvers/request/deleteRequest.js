@@ -4,9 +4,10 @@ const store = require('../../../utils/store.js')
 let { GraphQLError } = require('graphql')
 const Company = require('../../../models').Company
 
-module.exports = rejectRequest
 
-async function rejectRequest(obj, args, context, info) {
+module.exports = deleteRequest
+
+async function deleteRequest(obj, args, context, info) {
   
   let userId = store.getUserId()
 
@@ -25,13 +26,8 @@ async function rejectRequest(obj, args, context, info) {
     return new GraphQLError('User does not have a company')
   }
 
-  let toCompanyId = userCompanny._id
+  let fromCompanyId = userCompanny._id
 
-  let updatedRequest = await Request.rejectRequest(requestId, toCompanyId)
-  if (!updatedRequest) {
-    return new GraphQLError('Can not find request to update')
-  }
-
-  return updatedRequest
+  return Request.deleteRequest(requestId, fromCompanyId )
 
 }

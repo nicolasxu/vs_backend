@@ -10,12 +10,10 @@ type Mutation {
   updateMyClient(id: String, input: CompanyInput): Company
   deleteMyClient(id: String): RecordDelete
 
-  createClientRequest(id: String): Request
-  createVendorRequest(id: String): Request
-    
+  createRequest(toEmail: String, toIs: String): Request
   approveRequest(id: String): Request
   rejectRequest(id: String): Request
-  widthdrawRequest(id: String): Request
+  deleteRequest(id: String): Request
 
 
 

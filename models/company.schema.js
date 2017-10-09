@@ -41,7 +41,6 @@ var companySchema = new Schema ({
 										 // only private company have this set to creator company id
 	public: Boolean   // true if it is created by user, not belong to other company
 	/* use creatorCompanyId and public fields to determine if public company together */
-
 });
 
 // Can only be used to create my own company, not client or vendor
@@ -149,6 +148,55 @@ companySchema.statics.getMyClientDetail = async function (userId, clientId) {
 
   return clientDetail
 }
+
+companySchema.statics.getMyVendorDetail = async function (userId, vendorId) {
+
+	let Company = this.model('Company')
+
+  // 1. make sure it is my client
+  let myCompany = await Company.findOne({members: {'$in': [userId]}, vendors: {'$in': [vendorId]}})
+
+  if (!myCompany) {
+  	return null
+  }
+
+  let vendorDetail = await Company.findOne({_id: vendorId})
+
+  return vendorDetail
+
+}
+
+companySchema.statics.findUserCompany = async function(userId) {
+	if (!userId) {
+		return null
+	}
+
+	let Company = this.model('Company')
+
+	return Company.findOne({members: {'$in': [userId]}, public: true}).lean()
+}
+
+companySchema.statics.addClient = async function(toCid, clientId ) {
+
+	if(!toCid || !clientId) {
+		return null
+	}
+
+	let Company = this.model('Company')
+
+	return Company.findOneAndUpdate({_id: toCid}, {$push: {clients: clientId}}, {upsert: false, new: true})
+}
+
+companySchema.statics.addVendor = async function (toCid, vendorId) {
+	if(!toCid || !vendorId) {
+		return null
+	}
+
+	let Company = this.model('Company')
+
+	return Company.findOneAndUpdate({_id: toCid}, {$push: {vendors: vendorId}}, {upsert: false, new: true})
+}
+
 
 companySchema.plugin(mongoosePaginate)
 module.exports = companySchema;

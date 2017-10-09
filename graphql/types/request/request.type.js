@@ -12,7 +12,6 @@ type Request {
   to_company_name: String
   
   status: String
-  type: String
   created: String
   updated: String
 
@@ -27,8 +26,8 @@ type Request {
 /*
 
   type can be 'client' or 'vendor'
-  client: to is the client of from
-  vendor: to is vendor of from
+  client: 'to' is the client of 'from'
+  vendor: 'to' is vendor of 'from'
 
-  status: 'approved', 'rejected', 'widthdrew'
+  status: 'requested', 'approved', 'rejected', 'delete'
 */

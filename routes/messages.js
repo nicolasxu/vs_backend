@@ -10,5 +10,11 @@ module.exports = {
 		data: {
 			message: 'Create token success'
 		}
+	},
+	createUserSuccess: {
+		code: 2000,
+		data: {
+			message: 'Create user successful'
+		}
 	}
 }

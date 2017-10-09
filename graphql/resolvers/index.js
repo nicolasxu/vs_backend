@@ -10,14 +10,22 @@ const getMyClientDetail = require('./client/getMyClientDetail.js')
 const myClients = require('./client/listMyClients.js')
 const myVendors = require('./vendor/myVendors.js')
 
+const createRequest = require('./request/createRequest.js')
+const approveRequest = require('./request/apporveRequest.js')
+const rejectRequest = require('./request/rejectRequest.js')
+const deleteRequest = require('./request/deleteRequest.js')
+const sentRequest = require('./request/sentRequests.js')
+const receivedRequest = require('./request/receivedRequests.js')
+
 let resolver = {
   Query: {
     user: userDetail,
     myCompany: myCompanyDetail,
     clients: myClients,
     vendors: myVendors,
-    clientDetail: getMyClientDetail
-
+    clientDetail: getMyClientDetail,
+    sentRequests: sentRequest,
+    receivedRequests: receivedRequest
 
   },
   Mutation: {
@@ -25,6 +33,11 @@ let resolver = {
     createMyClient: createMyClient,
     deleteMyClient: deleteMyClient,
     updateMyClient: updateMyClient,
+
+    createRequest: createRequest,
+    approveRequest: approveRequest,
+    rejectRequest: rejectRequest,
+    deleteRequest: deleteRequest
 
   }
 }

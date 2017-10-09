@@ -93,6 +93,22 @@ userSchema.statics.login = async function (user) {
 	// don't deal token here
 }
 
+userSchema.statics.findActiveUserByEmail = async function (email) {
+
+	if (!email) {
+		return null
+	}
+
+	let User = this.model('User')
+
+	let oneUser = User.findOne({email: email, active: true}).lean()
+
+	delete oneUser.password
+
+	return oneUser
+
+}
+
 userSchema.plugin(mongoosePaginate)
 module.exports = userSchema;
 

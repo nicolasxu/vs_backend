@@ -6,7 +6,7 @@ module.exports = createMyCompany
 
 async function createMyCompany(obj, args, context, info) {
 
-  let userId = store.user && store.user._id
+  let userId = store.getUserId()
 
   if (!userId) {
     return new GraphQLError('User does not have token')
