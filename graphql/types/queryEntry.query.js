@@ -6,12 +6,13 @@ type Query {
   user: User
   
   clients(offset: Int, limit: Int): CompanyList
-  clientDetail: Company
+  clientDetail(id: String): Company
+
   
   vendors(offset: Int, limit: Int): CompanyList
   vendorDetail: Company
   myCompany: Company
- 
+
   
   
 }

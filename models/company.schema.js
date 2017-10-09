@@ -23,9 +23,12 @@ var companySchema = new Schema ({
 	country: String,
 	tel: String,
 	eid: String, // EID or SSN
+	website: String,
+	serviceDesc: String,
 	created: String,
 	updated: String,
 	invoiceEmails: [String], // notification email address
+	invoicePersonName: String, // person will be responsible for receiving and paying invoice in this company
 	members: [ObjectId], // contains all members, including the creator
 	vendors: [ObjectId],
 	clients: [ObjectId],
@@ -129,9 +132,22 @@ companySchema.statics.getVendors = async function (userId, offset, limit) {
 	let vendors = await Company.paginate({_id: {'$in': vendorIds}}, {offset: offset, limit: limit, lean: true})
 
 	return vendors
+}
 
+companySchema.statics.getMyClientDetail = async function (userId, clientId) {
 
+  let Company = this.model('Company')
 
+  // 1. make sure it is my client
+  let myCompany = await Company.findOne({members: {'$in': [userId]}, clients: {'$in': [clientId]}})
+
+  if (!myCompany) {
+  	return null
+  }
+  // 2. find company and return detail
+  let clientDetail = await Company.findOne({_id: clientId})
+
+  return clientDetail
 }
 
 companySchema.plugin(mongoosePaginate)
