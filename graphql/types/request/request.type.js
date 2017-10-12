@@ -10,10 +10,14 @@ type Request {
   
   to_company_id: String
   to_company_name: String
-  
+
+  client_company_id: String
+  vendor_company_id: String
+  count: Int
+
   status: String
-  created: String
-  updated: String
+  createdAt: String
+  updatedAt: String
 
 
 }

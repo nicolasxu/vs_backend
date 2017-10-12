@@ -21,9 +21,9 @@ var requestSchema = new Schema ({
   count: Number,
 
   status: String
- //   status: 'requested', 'approved', 'rejected', 'delete'
+ //   status: 'pending', 'approved', 'rejected', 'delete'
 
-})
+}, { timestamps: true })
 
 requestSchema.statics.findExistingRequest = async function (fromCompany, toCompany, clientCid, vendorCid) {
   // todo...
@@ -40,7 +40,7 @@ requestSchema.statics.findExistingRequest = async function (fromCompany, toCompa
     client_company_id: clientCid,
     vendor_company_id: vendorCid,
 
-    status: 'requested'
+    status: 'pending'
   }
 
   let Request = this.model('Request')
@@ -74,7 +74,7 @@ requestSchema.statics.createRequest = async function (fromCompany, toCompany, cl
     client_company_id: clientCid,
     vendor_company_id: vendorCid,
 
-    status: 'requested'
+    status: 'pending'
   }
 
   let existingRequest = await this.isRequestExist(fromCompany, toCompany, clientCid, vendorCid)
@@ -94,7 +94,7 @@ requestSchema.statics.approveRequest = function (requestId, toCompanyId) {
 
   let Request = this.model('Request')
 
-  return Request.findOneAndUpdate({_id: requestId, to_company_id: toCompanyId, status: 'requested'}, {status: 'approved'}, {upsert: false, new: true})
+  return Request.findOneAndUpdate({_id: requestId, to_company_id: toCompanyId, status: 'pending'}, {status: 'approved'}, {upsert: false, new: true})
 }
 
 
@@ -107,7 +107,7 @@ requestSchema.statics.rejectRequest = function (requestId, toCompanyId) {
 
   let Request = this.model('Request')
 
-  return Request.findOneAndUpdate({_id: requestId, to_company_id: toCompanyId, status: 'requested'}, {status: 'rejected'}, {upsert: false, new: true})
+  return Request.findOneAndUpdate({_id: requestId, to_company_id: toCompanyId, status: 'pending'}, {status: 'rejected'}, {upsert: false, new: true})
 }
 
 requestSchema.statics.deleteRequest = function (requestId, fromCompanyId) {
@@ -117,7 +117,7 @@ requestSchema.statics.deleteRequest = function (requestId, fromCompanyId) {
   }
   let Request = this.model('Request')
   
-  return Request.deleteOne({_id: requestId, from_company_id: fromCompanyId, status: 'requested' })
+  return Request.deleteOne({_id: requestId, from_company_id: fromCompanyId, status: 'pending' })
 }
 
 requestSchema.statics.receivedRequestList = function (toCompanyId, offset, limit) {
@@ -129,7 +129,13 @@ requestSchema.statics.receivedRequestList = function (toCompanyId, offset, limit
   let Request = this.model('Request')
 
   return Request.paginate({to_company_id: toCompanyId}, {offset: offset, limit: limit, lean: true})
-  // it is an array
+  /* it is an {
+    docs: [...],
+    total: ...,
+    offset: ...,
+    limit: ...
+  }
+  */
 }
 
 requestSchema.statics.sentRequestList = function (fromCompanyId, offset, limit) {
