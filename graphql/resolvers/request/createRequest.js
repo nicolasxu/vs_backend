@@ -34,7 +34,11 @@ async function createRequest(obj, args, context, info) {
         // find user id by email first
   let toUser = await User.findActiveUserByEmail(toEmail)
   if (!toUser) {
-    return new GraphQLError('No user found by this email')
+    // return new GraphQLError('No user found by this email')
+    return {
+        err_code: '4001', 
+        err_msg: 'No user found by this email'
+    }
   }
 
   let toUserId = toUser._id
