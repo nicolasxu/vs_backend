@@ -12,22 +12,34 @@ async function deleteRequest(obj, args, context, info) {
   let userId = store.getUserId()
 
   if (!userId) {
-    return new GraphQLError('User does not have token')
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not valid or empty'
+    }
   }
 
   let requestId = args.requestId
   if (!requestId) {
-    return new GraphQLError('Request ID does not exist')
+    return {
+      err_code: 4001,
+      err_msg: 'Request id is empty'
+    }
+
   }
 
-  // 1. verify user is in "to company"
+  // 1. get user company
   let userCompanny = await Company.findUserCompany(userId)
   if (!userCompanny) {
-    return new GraphQLError('User does not have a company')
+    return {
+      err_code: 4002,
+      err_msg: 'User does not have a company'
+    }
+
   }
 
   let fromCompanyId = userCompanny._id
 
-  return Request.deleteRequest(requestId, fromCompanyId )
+  // only allow sender to delete request. It is like a withdraw
+  return Request.deleteRequest(requestId, fromCompanyId)
 
 }

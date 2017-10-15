@@ -67,6 +67,7 @@ requestSchema.statics.createRequest = async function (fromCompany, toCompany, cl
     from_company_id: fromCompany._id,
     from_company_name: fromCompany.name,
     from_user_name: userName,
+    count: 1,
 
     to_company_id: toCompany._id,
     to_company_name: toCompany.name,
@@ -97,6 +98,23 @@ requestSchema.statics.approveRequest = function (requestId, toCompanyId) {
   return Request.findOneAndUpdate({_id: requestId, to_company_id: toCompanyId, status: 'pending'}, {status: 'approved'}, {upsert: false, new: true})
 }
 
+requestSchema.statics.isRequestExist = async function (fromCompany, toCompany, clientCid, vendorCid) {
+  let Request = this.model('Request')
+
+  let res = await Request.findOne({
+    from_company_id: fromCompany._id,
+    to_company_id: toCompany._id,
+    client_company_id: clientCid,
+    vendor_company_id: vendorCid,
+    status: 'pending'
+  })
+
+  if (res) {
+    return res
+  } else {
+    return null
+  }
+}
 
 
 requestSchema.statics.rejectRequest = function (requestId, toCompanyId) {

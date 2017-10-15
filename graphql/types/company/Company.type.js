@@ -20,6 +20,9 @@ type Company {
   
   createdAt: String
   updatedAt: String
+
+  err_code: Int
+  err_msg: String
 }
 
 

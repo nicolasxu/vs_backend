@@ -16,8 +16,6 @@ type Query {
   vendorDetail: Company
   myCompany: Company
 
-  
-  
 }
 
 `

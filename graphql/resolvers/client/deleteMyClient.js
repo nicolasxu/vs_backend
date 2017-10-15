@@ -11,14 +11,22 @@ async function deleteMyClient(obj, args, context, info) {
   const userId = store.getUserId()
   // 2. find user company id
   if(!userId) {
-    return new GraphQLError('No user id found in store')
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not found'
+    }
+
   }
 
 
   // 3. check if client id is passed in
   const clientId = args.id
   if(!clientId) {
-    return new GraphQLError('Client ID is not found')
+    return {
+      err_code: 4001,
+      err_msg: 'Client id is not found'
+    }
+
   }
 
   // 4. check if client id in company's clients array, 
@@ -41,13 +49,17 @@ async function deleteMyClient(obj, args, context, info) {
   // 5. delete company document by client id if it is private company.
   //    If not private company, do nothing
 
-  let foundClient = await Company.findOne({_id: clientId})
+  let foundClient = await Company.findOne({_id: clientId}).lean()
   if (!foundClient) {
-    return new GraphQLError('Orphan client id deleted')
+    return {
+      err_code: '4002',
+      err_msg: 'Orphan client id deleted'
+    }
+
   }
 
                                                 /* this is company id object, must conver to string to compare */
-  if (foundClient.public === false && foundClient.creatorCompanyId.toString() === myCompany.id) {
+  if (foundClient.public === false && foundClient.creatorCompanyId === myCompany.id) {
     // private client
     let deleteResult = await Company.deleteOne({_id: clientId})
     

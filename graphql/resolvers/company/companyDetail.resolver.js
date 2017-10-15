@@ -8,12 +8,13 @@ module.exports = getCompanyDetail
 
 function getCompanyDetail(obj, args, context, info) {
 
-  let _id = store.user && store.user._id
-  console.log('user id in getCompanyDetail:', _id)
-  if(!_id) {
-    return ''
+  let userId = store.getUserId()
+  console.log('user id in getCompanyDetail:', userId)
+  if(!userId) {
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not valid or empty'
+    }
   }
-
-  return Company.findOne({members: {'$in': [_id]}})
-
+  return Company.findUserCompany(userId)
 }

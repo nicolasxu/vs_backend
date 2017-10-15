@@ -9,6 +9,8 @@ type User {
   updatedAt: String
   firstName: String
   lastName: String
+  err_code: Int
+  err_msg: String
 }
 
 `

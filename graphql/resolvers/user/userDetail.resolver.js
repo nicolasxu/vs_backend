@@ -8,8 +8,8 @@ async function userDetail(obj, args, context, info) {
 
   let _id = store.user._id
 
-  let user = await User.findOne({_id: _id})
+  let user = await User.findOne({_id: _id}).lean()
 
-  return user.toJSON()
+  return user
 
 }

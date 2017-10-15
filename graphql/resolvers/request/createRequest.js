@@ -13,14 +13,22 @@ async function createRequest(obj, args, context, info) {
   let userId = store.getUserId()
 
   if(!userId) {
-    return new GraphQLError('User does not have token')
+    return {
+      err_code: 4000,
+      err_msg: 'User token does not exist'
+    }
+
   }
 
   let toEmail = args.toEmail
   let toIs = args.toIs // 'client', 'vendor'
 
   if (!toEmail || !toIs) {
-    return new GraphQLError('toEmail or toIs does not exist')
+    return {
+      err_code: 4003,
+      err_msg: 'toEmail or toIs is empty'
+    }
+
   }
 
   // from company is always user's company
@@ -28,15 +36,19 @@ async function createRequest(obj, args, context, info) {
   // 1. find fromCompany
   let myCompany = await Company.findUserCompany(userId) // return lean json object, not document
   if (!myCompany) {
-    return new GraphQLError('user company does not exist')
+    return {
+      err_code: 4004,
+      err_msg: 'User company does not exist'
+    }
+
   }
   // 2. find toCompany
         // find user id by email first
   let toUser = await User.findActiveUserByEmail(toEmail)
   if (!toUser) {
-    // return new GraphQLError('No user found by this email')
+
     return {
-        err_code: '4001', 
+        err_code: 4001, 
         err_msg: 'No user found by this email'
     }
   }
@@ -45,7 +57,18 @@ async function createRequest(obj, args, context, info) {
   let toCompany = await Company.findUserCompany(toUserId)
 
   if (!toCompany) {
-    return new GraphQLError('User with this email does not have a company')
+    return {
+      err_code: 4008,
+      err_msg: 'To company is not found by toEmail'
+    }
+
+  }
+
+  if (toCompany._id === myCompany._id) {
+    return {
+      err_code: 4005,
+      err_msg: 'Can not send request to your own company'
+    }
   }
 
   // check if already established relationship
@@ -54,13 +77,21 @@ async function createRequest(obj, args, context, info) {
     // check clients
     let clientDetail = await Company.getMyClientDetail(userId, toCompany._id)
     if (clientDetail) {
-      return new GraphQLError('It is already your client')
+      return {
+        err_code: 4006,
+        err_msg: 'To Company is already your client'
+      }
+
     } 
   } else {
     // check vendors
     let vendorDetail = await Company.getMyVendorDetail(userId, toCompany._id)
     if (vendorDetail) {
-      return new GraphQLError('It is already your vendor')
+      return {
+        err_code: 4007,
+        err_msg: 'To Company is already your vendor'
+      }
+
     }
   }
 

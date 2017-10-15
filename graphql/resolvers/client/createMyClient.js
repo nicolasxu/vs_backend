@@ -11,7 +11,10 @@ async function createMyClient(obj, args, context, info) {
   let userId = store.getUserId()
 
   if(!userId) {
-    return new GraphQLError('No user id found in store')
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not found'
+    }
   }
 
   let client = args.input
@@ -21,7 +24,10 @@ async function createMyClient(obj, args, context, info) {
   let myCompany = await Company.findOne({members: {'$in': [userId]}})
 
   if (!myCompany) {
-    return new GraphQLError('User does not have a company')
+    return {
+      err_code: 4001,
+      err_msg: 'User does not have a company'
+    }
   }
 
   let myCompanyId = myCompany._id
@@ -37,13 +43,17 @@ async function createMyClient(obj, args, context, info) {
   try {
     clientCreated = await Company.create(client)
   } catch (e) {
-    return new GraphQLError('Client object may contain unsupported field(s)')
+    return {
+      err_code: '4002',
+      err_msg: 'client object may contain unsupported fields'
+    }
+
   }
 
   // link put created company id to clients array
 
-  let updatedMyCompany = await Company.findOneAndUpdate({_id: myCompany._id}, {$push: {clients: clientCreated._id}}, {upsert: false, new: true} )
-  return clientCreated
+  return Company.findOneAndUpdate({_id: myCompany._id}, {$push: {clients: clientCreated._id}}, {upsert: false, new: true} )
+
 }
 
 /* 

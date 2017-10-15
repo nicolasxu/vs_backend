@@ -14,12 +14,18 @@ async function receivedRequest(obj, args, context, info) {
   let userId = store.getUserId()
 
   if (!userId) {
-    return new GraphQLError('User does not have token')
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not valid or empty'
+    }
   }
 
   let myCompany = await Company.findUserCompany(userId)
   if(!myCompany) {
-    return new GraphQLError('User does not have a company')
+    return {
+      err_code: 4001,
+      err_msg: 'User does not have a company'
+    }
   }
 
   return Request.receivedRequestList(myCompany._id, offset, limit)

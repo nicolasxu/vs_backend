@@ -10,22 +10,28 @@ async function getMyClientDetail(obj, args, context, info) {
   let userId = store.getUserId()
 
   if(!userId) {
-    return new GraphQLError('No user id found in store')
+    return {
+      err_code: 4000,
+      err_msg: 'User token is not found or not valid'
+    }
   }
 
   let clientId = args.id
 
   if (!clientId) {
-    return new GraphQLError('Client id is empty')
+    return {
+      err_code: 4001,
+      err_msg: 'Client id is empty'
+    }
   }
 
   let clientDetail = await Company.getMyClientDetail(userId, clientId)
 
   if (!clientDetail) {
-    return new GraphQLError('Can not find your client')
+    return {
+      err_code: 4002,
+      err_msg: 'Can not find your client'
+    }
   }
-
   return clientDetail
-
-
 }
