@@ -10,6 +10,7 @@ type Query {
 
   receivedRequests(offset:Int, limit: Int): RequestList
   sentRequests(offset:Int, limit: Int): RequestList
+  requestDetail(requestId: String): Request
 
   
   vendors(offset: Int, limit: Int): CompanyList

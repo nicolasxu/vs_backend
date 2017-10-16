@@ -64,7 +64,7 @@ async function createRequest(obj, args, context, info) {
 
   }
 
-  if (toCompany._id === myCompany._id) {
+  if (toCompany._id.toString() === myCompany._id.toString()) {
     return {
       err_code: 4005,
       err_msg: 'Can not send request to your own company'

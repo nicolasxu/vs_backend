@@ -34,7 +34,7 @@ async function approveRequest(obj, args, context, info) {
     }
   }
 
-  let toCompanyId = userCompanny._id
+  let toCompanyId = userCompanny._id.toString()
 
   let updatedRequest = await Request.approveRequest(requestId, toCompanyId)
   if (!updatedRequest) {

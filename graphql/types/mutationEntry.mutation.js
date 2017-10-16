@@ -11,9 +11,9 @@ type Mutation {
   deleteMyClient(id: String): RecordDelete
 
   createRequest(toEmail: String, toIs: String): Request
-  approveRequest(id: String): Request
-  rejectRequest(id: String): Request
-  deleteRequest(id: String): Request
+  approveRequest(requestId: String): Request
+  rejectRequest(requestId: String): Request
+  deleteRequest(requestId: String): Request
 
 
 

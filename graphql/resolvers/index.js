@@ -16,6 +16,7 @@ const rejectRequest = require('./request/rejectRequest.js')
 const deleteRequest = require('./request/deleteRequest.js')
 const sentRequest = require('./request/sentRequests.js')
 const receivedRequest = require('./request/receivedRequests.js')
+const requestDetail = require('./request/getRequestDetail.js')
 
 let resolver = {
   Query: {
@@ -25,7 +26,8 @@ let resolver = {
     vendors: myVendors,
     clientDetail: getMyClientDetail,
     sentRequests: sentRequest,
-    receivedRequests: receivedRequest
+    receivedRequests: receivedRequest,
+    requestDetail: requestDetail
 
   },
   Mutation: {

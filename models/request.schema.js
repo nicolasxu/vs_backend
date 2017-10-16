@@ -177,6 +177,17 @@ requestSchema.statics.deleteRequest = function (requestId, fromCompanyId) {
   return Request.deleteOne({_id: requestId, from_company_id: fromCompanyId })
 }
 
+requestSchema.statics.getDetail = function (companyId, requestId) {
+  if(!companyId || !requestId) {
+    return null
+  }
+
+  let Request = this.model('Request')
+
+  return Request.findOne({_id: requestId, $or: [{client_company_id: {$in: [companyId]} }, {vendor_company_id: {$in: [companyId]}}]})
+  
+}
+
 
 requestSchema.plugin(mongoosePaginate)
 
