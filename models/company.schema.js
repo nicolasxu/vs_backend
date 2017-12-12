@@ -5,13 +5,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;;
-var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
 let { GraphQLError } = require('graphql')
 var mongoosePaginate = require('mongoose-paginate')
 
-
-mongoose.Promise = Promise;
 
 var companySchema = new Schema ({
 	name: String,
@@ -33,10 +30,10 @@ var companySchema = new Schema ({
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
-	active: Boolean, // set in active will not receive invoice and other request
+	active: Boolean, // set inactive will not receive invoice and other request
 	
 	creatorCompanyId: ObjectId, 
-										 // company who create this company, empty if it is active company
+										 // company who create this company, empty if it is public company
 										 // creatorCompanyId will be empty if it is public company
 										 // only private company have this set to creator company id
 	public: Boolean   // true if it is created by user, not belong to other company

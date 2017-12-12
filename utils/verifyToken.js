@@ -14,9 +14,9 @@ function verifyToken(req, res, next) {
     try {
       decoded = jwt.verify(token, config.token_secret)
     } catch (e) {
-      return res.status(403).json({
-        status: false,
-        message: 'Token verification error'
+      return res.status(200).json({
+        err_code: 4002,
+        message: 'Token can not be verified'
       })
     }
 
@@ -26,9 +26,9 @@ function verifyToken(req, res, next) {
 
   }
 
-  res.status(403).json({
-    status: false,
-    message: 'Can not verify token'
+  res.status(200).json({
+    err_code: 4003,
+    message: 'Token is empty'
   })
   
 
