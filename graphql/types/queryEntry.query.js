@@ -12,10 +12,12 @@ type Query {
   sentRequests(offset:Int, limit: Int): RequestList
   requestDetail(requestId: String): Request
 
-  
   vendors(offset: Int, limit: Int): CompanyList
   vendorDetail: Company
   myCompany: Company
+
+  myTemplates: TemplateList
+  template(id: String): Template
 
 }
 

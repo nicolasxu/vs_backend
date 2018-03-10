@@ -15,10 +15,12 @@ var templateSchema = new Schema ({
 	name: String, 
 	html: String,
 	css: String, 
-	js: String,  
+	js: String,
+  active: Boolean,
+  isDefault: Boolean,
 	created: String, 
-	updated: String,
-	active: Boolean
+	updated: String
+	
 });
 
 

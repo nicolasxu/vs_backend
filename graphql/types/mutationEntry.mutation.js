@@ -15,6 +15,11 @@ type Mutation {
   rejectRequest(requestId: String): Request
   deleteRequest(requestId: String): Request
 
+  createTemplate(input: TemplateInput): Template
+  updateTemplate(input: TemplateInput): Template
+  deleteTemplate(id: String): RecordDelete
+
+
 
 
 }

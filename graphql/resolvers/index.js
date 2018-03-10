@@ -18,6 +18,8 @@ const sentRequest = require('./request/sentRequests.js')
 const receivedRequest = require('./request/receivedRequests.js')
 const requestDetail = require('./request/getRequestDetail.js')
 
+const getTemplateById = require('./template/getTemplateById.js')
+
 let resolver = {
   Query: {
     user: userDetail,
@@ -27,7 +29,8 @@ let resolver = {
     clientDetail: getMyClientDetail,
     sentRequests: sentRequest,
     receivedRequests: receivedRequest,
-    requestDetail: requestDetail
+    requestDetail: requestDetail,
+    template: getTemplateById
 
   },
   Mutation: {

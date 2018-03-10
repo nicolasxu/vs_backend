@@ -85,3 +85,17 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+
+/* 
+
+Use this format to test GraphQL query:
+find token in browser console
+
+http://localhost:3000/graphiql?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjU3ODNjYWYyYWViMmU5ZThiN2QyY2MxYyIsImVtYWlsIjoieHUuc2hlbnhpbkBnbWFpbC5jb20iLCJhY3RpdmUiOnRydWV9LCJpYXQiOjE1MjA3MDk5MzMsImV4cCI6MTUyMDcxMzUzM30.SkStsCbes9H0PDFrRY2LPGEnfGp4eeCuVfqKs2yePXw
+
+
+
+
+
+*/
