@@ -23,10 +23,48 @@ var templateSchema = new Schema ({
 	
 });
 
+/*
+
+ids is array of object id
+
+*/
+templateSchema.statics.getByIds = function (ids) {
+  if (!Array.isArray(ids)) {
+    return []
+  }
+
+  let Template = this.model('Template')
+
+  return Template.find({
+    '_id': {$in: ids}
+  })
+
+}
+
 
 templateSchema.plugin(mongoosePaginate)
 
-module.exports = templateSchema;
+module.exports = templateSchema
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

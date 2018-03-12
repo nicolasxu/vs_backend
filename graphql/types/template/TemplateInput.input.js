@@ -7,6 +7,7 @@ input TemplateInput {
   html: String
   css: String
   js: String
+  isDefault: Boolean
   active: Boolean
 }
 

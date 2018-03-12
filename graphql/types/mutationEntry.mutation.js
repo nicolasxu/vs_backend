@@ -16,7 +16,7 @@ type Mutation {
   deleteRequest(requestId: String): Request
 
   createTemplate(input: TemplateInput): Template
-  updateTemplate(input: TemplateInput): Template
+  updateTemplate(id: String, input: TemplateInput): Template
   deleteTemplate(id: String): RecordDelete
 
 

@@ -19,6 +19,10 @@ const receivedRequest = require('./request/receivedRequests.js')
 const requestDetail = require('./request/getRequestDetail.js')
 
 const getTemplateById = require('./template/getTemplateById.js')
+const getTemplates = require('./template/getTemplates.js')
+const deleteTemplate = require('./template/deleteTemplate.js')
+const updateTemplate = require('./template/updateTemplate.js')
+const createTemplate = require('./template/createTemplate.js')
 
 let resolver = {
   Query: {
@@ -30,7 +34,8 @@ let resolver = {
     sentRequests: sentRequest,
     receivedRequests: receivedRequest,
     requestDetail: requestDetail,
-    template: getTemplateById
+    template: getTemplateById,
+    templates: getTemplates
 
   },
   Mutation: {

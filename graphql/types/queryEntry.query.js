@@ -16,7 +16,7 @@ type Query {
   vendorDetail: Company
   myCompany: Company
 
-  myTemplates: TemplateList
+  templates: TemplateList
   template(id: String): Template
 
 }
