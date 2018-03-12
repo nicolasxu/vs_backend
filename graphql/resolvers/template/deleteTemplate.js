@@ -54,7 +54,8 @@ async function deleteTemplate(obj, args, context, info) {
   let myTemplates = myCompany.templates
   let isMyTemplate = false
   for(let i = 0; i < myTemplates.length; i++) {
-    if (myTemplates[i] === templateId ) {
+    // must convert object id to string!!
+    if (myTemplates[i].toString() === templateId ) {
       isMyTemplate = true
       break
     }
@@ -75,11 +76,17 @@ async function deleteTemplate(obj, args, context, info) {
     }
   }
   // 5. delete
-  await Template.deleteOne({_id: templateId})
+  let res = await Template.deleteOne({_id: templateId})
+  console.log('del result', res)
+  // result: { n: 1, ok: 1 },
 
   // 6. update my company
   await Company.findOneAndUpdate({_id: myCompany._id}, {$pullAll: {templates: [templateId]} })
 
-  return targetTemplate
+  return {
+    _id: templateId,
+    count: res.CommandResult.result.n,
+    message: res.CommandResult.result.ok
+  }
 
 }

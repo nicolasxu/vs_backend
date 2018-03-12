@@ -47,7 +47,11 @@ let resolver = {
     createRequest: createRequest,
     approveRequest: approveRequest,
     rejectRequest: rejectRequest,
-    deleteRequest: deleteRequest
+    deleteRequest: deleteRequest,
+
+    createTemplate: createTemplate,
+    updateTemplate: updateTemplate,
+    deleteTemplate: deleteTemplate
 
   }
 }

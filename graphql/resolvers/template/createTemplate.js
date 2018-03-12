@@ -36,6 +36,7 @@ async function createTemplate(obj, args, context, info) {
 
   // 2. create
   let inputData = args.input
+  console.log('args', args)
   if (!inputData.name ) {
     return {
       err_code: 4002,
@@ -60,10 +61,13 @@ async function createTemplate(obj, args, context, info) {
     html: inputData.html,
     css: inputData.css,
     js: inputData.js,
-    isDefault: false,
+    isDefault: inputData.isDefault,
     active: inputData.active
   }
-  let newTemplate = await Template.create(filteredData).lean()
+
+  // note: Template.create return a promise object, not a query, 
+  // so create().lean() will be error
+  let newTemplate = await Template.create(filteredData)
 
   // 3. attach to company
   await Company.findOneAndUpdate({_id: myCompany._id}, {$push: {templates: newTemplate._id}}, {upsert: false, new: true})

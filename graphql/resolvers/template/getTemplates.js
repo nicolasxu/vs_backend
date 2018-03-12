@@ -44,7 +44,7 @@ async function getTemplates(obj, args, context, info) {
 
   // 4. return combined
   let combined = defaultTemplates.concat(myTemplates)
-  console.log('combined', combined)
+  // console.log('combined', combined)
   return {
     docs: combined,
     total: combined.length,
