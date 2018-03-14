@@ -44,10 +44,20 @@ async function getTemplates(obj, args, context, info) {
 
   // 4. return combined
   let combined = defaultTemplates.concat(myTemplates)
-  // console.log('combined', combined)
+
+  // 5. remove duplicates
+  let idSet = {}
+  combined.forEach((t)=> {
+    idSet[t._id.toString()] = t
+  })
+  let uniqTemplates = []
+  for(let key in idSet) {
+    uniqTemplates.push(idSet[key])
+  }
+
   return {
-    docs: combined,
-    total: combined.length,
+    docs: uniqTemplates,
+    total: uniqTemplates.length,
     limit: 50,
     offset: 0
   }
