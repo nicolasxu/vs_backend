@@ -22,11 +22,20 @@ async function getTemplateById(obj, args, context, info) {
     }
   }
 
+  // 2. get my company
+  let myCompany = await Company.findUserCompany(userId)
+  if (!myCompany) {
+    return {
+      err_code: 4001,
+      err_msg: 'Can not find user company'
+    }
+  }  
+
   // 2. template id
   let templateId = args.id
   if (!templateId) {
     return {
-      err_code: 4001,
+      err_code: 4002,
       err_msg: 'Template ID is empty'
     }
   }
@@ -36,7 +45,7 @@ async function getTemplateById(obj, args, context, info) {
 
   if (!isTemplateIdValid) {
     return {
-      err_code: 4002,
+      err_code: 4003,
       err_msg: 'Template id is not valid'
     }
   }
@@ -45,7 +54,7 @@ async function getTemplateById(obj, args, context, info) {
   let myCompany = await Company.findUserCompany(userId)
   if (!myCompany) {
     return {
-      err_code: 4003,
+      err_code: 4004,
       err_msg: 'User does not have a company'
     }
   }
@@ -54,7 +63,7 @@ async function getTemplateById(obj, args, context, info) {
   let foundTemplate = await Template.findById(templateId).lean()
   if (!foundTemplate) {
     return {
-      err_code: 4004,
+      err_code: 4005,
       err_msg: 'Can not find template by this id'
     }
   }
@@ -77,7 +86,7 @@ async function getTemplateById(obj, args, context, info) {
     return foundTemplate
   } else {
     return {
-      err_code: 4005,
+      err_code: 4006,
       err_msg: 'Can not find the template that belongs to the company'
     }
   }

@@ -19,7 +19,9 @@ type Mutation {
   updateTemplate(id: String, input: TemplateInput): Template
   deleteTemplate(id: String): RecordDelete
 
-
+  createProduct(input: ProductInput) : Product
+  updateProduct(id: String, input: ProductInput) : Product
+  deleteProduct(id: String): RecordDelete
 
 
 }

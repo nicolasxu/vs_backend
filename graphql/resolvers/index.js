@@ -24,6 +24,13 @@ const deleteTemplate = require('./template/deleteTemplate.js')
 const updateTemplate = require('./template/updateTemplate.js')
 const createTemplate = require('./template/createTemplate.js')
 
+const createProduct = require('./product/createProduct.js')
+const deleteProduct = require('./product/deleteProduct.js')
+const updateProduct = require('./product/updateProduct.js')
+const getProductDetail = require('./product/getProductDetail.js')
+const getProducts = require('./product/getProducts.js')
+const findProducts = require('./product/findProducts.js')
+
 let resolver = {
   Query: {
     user: userDetail,
@@ -35,7 +42,11 @@ let resolver = {
     receivedRequests: receivedRequest,
     requestDetail: requestDetail,
     template: getTemplateById,
-    templates: getTemplates
+    templates: getTemplates,
+
+    product: getProductDetail,
+    products: getProducts,
+    productFind: findProducts
 
   },
   Mutation: {
@@ -51,7 +62,11 @@ let resolver = {
 
     createTemplate: createTemplate,
     updateTemplate: updateTemplate,
-    deleteTemplate: deleteTemplate
+    deleteTemplate: deleteTemplate,
+
+    createProduct: createProduct,
+    updateProduct: updateProduct,
+    deleteProduct: deleteProduct
 
   }
 }

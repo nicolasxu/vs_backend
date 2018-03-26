@@ -19,6 +19,10 @@ type Query {
   templates: TemplateList
   template(id: String): Template
 
+  products(offset: Int, limit: Int): ProductList
+  product(id: String): Product
+  productFind(searchStr: String): ProductList
+
 }
 
 `

@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
-var userSchema = require('./user.schema.js');
-var companySchema = require('./company.schema.js');
-var invoiceSchema = require('./invoice.schema.js');
-var invoiceTemplateSchema = require('./template.schema.js');
-var requestSchema = require('./request.schema.js')
+const mongoose = require('mongoose');
+const userSchema = require('./user.schema.js');
+const companySchema = require('./company.schema.js');
+const invoiceSchema = require('./invoice.schema.js');
+const invoiceTemplateSchema = require('./template.schema.js');
+const requestSchema = require('./request.schema.js')
+const productSchema = require('./product.schema.js')
 // the logic of mongoose is:
 //   1. use new Schema({}) to create a schema
 //   2. use mongoose.model('ModelName', schema) to create Model
@@ -11,12 +12,13 @@ var requestSchema = require('./request.schema.js')
 //      use Model.find() to search
 
 
-var Models = {
+const Models = {
 	User: mongoose.model('User', userSchema),
 	Company: mongoose.model('Company', companySchema),
 	Invoice: mongoose.model('Invoice', invoiceSchema),
 	Template: mongoose.model('Template', invoiceTemplateSchema),
-  Request: mongoose.model('Request', requestSchema)
+  Request: mongoose.model('Request', requestSchema),
+  Product: mongoose.model('Product', productSchema)
 }
 
 module.exports = Models;

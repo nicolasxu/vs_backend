@@ -20,6 +20,11 @@ let TemplateInput = require('./template/TemplateInput.input.js')
 let TemplateList = require('./template/TemplateList.type.js')
 let TemplateTotal = TemplateType + TemplateInput + TemplateList
 
+let ProductType = require('./product/Product.type.js')
+let ProductInput = require('./product/ProductInput.input.js')
+let ProductList = require('./product/ProductList.type.js')
+let ProductTotal = ProductType + ProductInput + ProductList
+
 let query = require('./queryEntry.query.js')
 let mutation = require('./mutationEntry.mutation.js')
 
@@ -28,6 +33,7 @@ let totalType = commonTotal +
                 CompanyTotal + 
                 RequestTotal +
                 TemplateTotal +
+                ProductTotal + 
                 query + 
                 mutation
 

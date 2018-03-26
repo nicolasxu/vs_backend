@@ -20,18 +20,27 @@ async function updateTempate(obj, args, context, info) {
     }
   }
 
+  // 2. get my company
+  let myCompany = await Company.findUserCompany(userId)
+  if (!myCompany) {
+    return {
+      err_code: 4001,
+      err_msg: 'Can not find user company'
+    }
+  }  
+
   // 2. args.id, args.input
   let templateId = args.id
   if (!templateId) {
     return {
-      err_code: 4001,
+      err_code: 4002,
       err_msg: 'Can not find template by id'
     }
   }
 
   if (!args.input) {
     return {
-      err_code: 4002,
+      err_code: 4003,
       err_msg: 'input object is missing'
     }
   }
@@ -60,7 +69,7 @@ async function updateTempate(obj, args, context, info) {
   let myCompany = await Company.findUserCompany(userId)
   if (!myCompany) {
     return {
-      err_code: 4003,
+      err_code: 4004,
       err_msg: 'Can not find user company'
     }
   }
@@ -78,7 +87,7 @@ async function updateTempate(obj, args, context, info) {
   }
   if (!isMyTemplate) {
     return {
-      err_code: 4004,
+      err_code: 4005,
       err_msg: 'Can not find template in your company template array'
     }
   }
@@ -87,7 +96,7 @@ async function updateTempate(obj, args, context, info) {
   let targetTemplate = await Template.findOne({_id: templateId }).lean()
   if (!targetTemplate) {
     return {
-      err_code: 4005,
+      err_code: 4006,
       err_msg: 'Can not find target template by id'
     }
   }

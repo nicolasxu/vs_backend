@@ -77,7 +77,7 @@ async function deleteTemplate(obj, args, context, info) {
   }
   // 5. delete
   let res = await Template.deleteOne({_id: templateId})
-  console.log('del result', res)
+  // console.log('del result', res)
   // result: { n: 1, ok: 1 },
 
   // 6. update my company
