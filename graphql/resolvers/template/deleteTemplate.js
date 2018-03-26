@@ -67,12 +67,12 @@ async function deleteTemplate(obj, args, context, info) {
     }
   }
 
-  // 4. not default
-  let targetTemplate = await Template.findOne({_id: templateId}).lean()
+  // 4. search in non-default template
+  let targetTemplate = await Template.findOne({_id: templateId, isDefault: false }).lean()
   if (!targetTemplate) {
     return {
       err_code: 4005,
-      err_msg: 'Can not find template by this id'
+      err_msg: 'Can not find non-default template by this id'
     }
   }
   // 5. delete
@@ -81,6 +81,7 @@ async function deleteTemplate(obj, args, context, info) {
   // result: { n: 1, ok: 1 },
 
   // 6. update my company
+  // todo: need to check return value first
   await Company.findOneAndUpdate({_id: myCompany._id}, {$pullAll: {templates: [templateId]} })
 
   return {

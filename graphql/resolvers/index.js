@@ -5,10 +5,13 @@ const myCompanyDetail = require('./company/companyDetail.resolver.js')
 const createMyClient = require('./client/createMyClient.js')
 const deleteMyClient = require('./client/deleteMyClient.js')
 const updateMyClient = require('./client/updateMyClient.js')
-const getMyClientDetail = require('./client/getMyClientDetail.js')
 
 const myClients = require('./client/listMyClients.js')
-const myVendors = require('./vendor/myVendors.js')
+const getMyClientDetail = require('./client/getMyClientDetail.js')
+
+const listMyVendors = require('./vendor/listMyVendors.js')
+const vendorDetail = require('./vendor/vendorDetail.js')
+const severVendorRelationship = require('./vendor/severVendorRelationship.js')
 
 const createRequest = require('./request/createRequest.js')
 const approveRequest = require('./request/apporveRequest.js')
@@ -36,8 +39,11 @@ let resolver = {
     user: userDetail,
     myCompany: myCompanyDetail,
     clients: myClients,
-    vendors: myVendors,
     clientDetail: getMyClientDetail,
+
+    vendors: listMyVendors,
+    vendor: vendorDetail,
+    
     sentRequests: sentRequest,
     receivedRequests: receivedRequest,
     requestDetail: requestDetail,
@@ -54,6 +60,8 @@ let resolver = {
     createMyClient: createMyClient,
     deleteMyClient: deleteMyClient,
     updateMyClient: updateMyClient,
+
+    severVendorRelationship: severVendorRelationship,
 
     createRequest: createRequest,
     approveRequest: approveRequest,

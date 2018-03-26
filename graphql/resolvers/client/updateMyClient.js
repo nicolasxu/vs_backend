@@ -53,7 +53,7 @@ async function updateMyClient(obj, args, context, info) {
   }
   
   // 4. check if it private or public company
-  if (oldClient.public === false && oldClient.creatorCompanyId === myCompany.id) {
+  if ( oldClient.creatorCompanyId === myCompany.id) {
     // 5. if private, update client company document in company collection        
     // do update
     let newClientCopy = _.cloneDeep(newClient)

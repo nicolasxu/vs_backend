@@ -8,8 +8,8 @@ module.exports = createMyClient
 
 async function createMyClient(obj, args, context, info) {
 
+  // 1. user login
   let userId = store.getUserId()
-
   if(!userId) {
     return {
       err_code: 4000,
@@ -17,10 +17,10 @@ async function createMyClient(obj, args, context, info) {
     }
   }
 
-  let client = args.input
 
-  /*** future todo: check user privilege ***/
 
+
+  // 2. my company exists
   let myCompany = await Company.findOne({members: {'$in': [userId]}})
 
   if (!myCompany) {
@@ -31,11 +31,10 @@ async function createMyClient(obj, args, context, info) {
   }
 
   let myCompanyId = myCompany._id
-
+  let client = args.input
   delete client._id // create new private client does not need id
 
   // must set these 2 fields
-  client.public = false
   client.creatorCompanyId = myCompanyId
 
   // creawte comapny record

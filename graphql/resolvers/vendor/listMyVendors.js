@@ -15,8 +15,17 @@ async function myVendors(obj, args, context, info) {
     }
   }
 
+  // 2. get my company
+  let myCompany = await Company.findUserCompany(userId)
+  if (!myCompany) {
+    return {
+      err_code: 4001,
+      err_msg: 'Can not find user company'
+    }
+  }
+
   let offset = parseInt(args.offset) || 0 
   let limit = parseInt(args.limit) || 50
-  return Company.getVendors(userId, offset, limit)
+  return Company.getVendors(myCompany._id, offset, limit)
 
 }

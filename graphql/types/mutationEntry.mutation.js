@@ -9,6 +9,9 @@ type Mutation {
   createMyClient(input: CompanyInput): Company
   updateMyClient(id: String, input: CompanyInput): Company
   deleteMyClient(id: String): RecordDelete
+  severClientRelationship(id: String): Company
+
+  severVendorRelationship(id: String): Company
 
   createRequest(toEmail: String, toIs: String): Request
   approveRequest(requestId: String): Request

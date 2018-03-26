@@ -8,6 +8,10 @@ type Query {
   clients(offset: Int, limit: Int): CompanyList
   clientDetail(id: String): Company
 
+  vendors(offset: Int, limit: Int): CompanyList
+  vendor(id: String): Company
+
+
   receivedRequests(offset:Int, limit: Int): RequestList
   sentRequests(offset:Int, limit: Int): RequestList
   requestDetail(requestId: String): Request

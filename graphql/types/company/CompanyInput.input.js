@@ -16,6 +16,10 @@ input CompanyInput {
   country: String
   eid: String
   tel: String
+  website: String
+  serviceDesc: String
+  invoiceEmails: [String]
+  invoicePersonname: String
 
 }
 

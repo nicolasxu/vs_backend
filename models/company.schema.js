@@ -30,14 +30,15 @@ var companySchema = new Schema ({
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
-	active: Boolean, // set inactive will not receive invoice and other request
-	
-	creatorCompanyId: ObjectId, 
-										 // company who create this company, empty if it is public company
-										 // creatorCompanyId will be empty if it is public company
-										 // only private company have this set to creator company id
-	public: Boolean   // true if it is created by user, not belong to other company
+	isActive: Boolean, // set inactive will not receive invoice and other request
+
+	creatorCompanyId: ObjectId 
+										 // company who create this company, empty if it is user creates its own company
+										 
+										 // only company created by other company have this set to creator company id
+	//public: Boolean    // true if it is created by user, not belong to other company
 	/* use creatorCompanyId and public fields to determine if public company together */
+	// todo: remove this field
 });
 
 // Can only be used to create my own company, not client or vendor
@@ -57,17 +58,20 @@ companySchema.statics.createMyCompany = async function (companyJson) {
 
 	// create company
 	var Company = this.model('Company')
-	var userOid = new ObjectId(userId)
+//	var userOid = new ObjectId(userId)
 	
-	companyJson.members = [userId];
+	// companyJson.members = [userId];
 	companyJson.active = true;
-	companyJson.public = true;
+
 	// Use object string string when type is ObjectId, the string will be coerced to Object ID in mongoDB,
 	// if you use a object id type, which is a json object, there will be a validation error
+	// debug
 	var invoiceTemplateId = '579572800d8bb41654d00b44' //new ObjectId('579572800d8bb41654d00b44') 
 	// TODO: there could be 2 default invoice templates
 	//       or premium user will have its own customized templates
 	companyJson.templates = [invoiceTemplateId];
+
+	// create my own company, the creatorCompanyId must be null
 	companyJson.creatorCompanyId = null
 	
 	return Company.create(companyJson)
@@ -99,29 +103,30 @@ companySchema.statics.isUserInOtherCompany = async function (userId) {
 	}
 }
 
-companySchema.statics.getClients = async function (userId, offset, limit) {
+companySchema.statics.getClients = async function (myCompanyId, offset, limit) {
 
+	if (!myCompanyId) {
+		return []
+	}
 	let Company = this.model('Company')
 
 	// 1. find my company
-	let myCompany = await Company.findOne({members: {'$in': [userId]}})
+	let myCompany = await Company.findOne({_id: myCompanyId})
 
-	if (!myCompany) {
-		return new GraphQLError('Can not find user company')
-	}
+
 	let clientIds = myCompany.clients
 	return Company.paginate({_id: {'$in': clientIds}}, {offset: offset, limit: limit, lean: true} )
 }
 
-companySchema.statics.getVendors = async function (userId, offset, limit) {
+companySchema.statics.getVendors = async function (myCompanyId, offset, limit) {
+
+	if (!myCompanyId) {
+		return []
+	}
 	let Company = this.model('Company')
 
 	// 1. find my company
-	let myCompany = await Company.findOne({members: {'$in': [userId]}})
-
-	if (!myCompany) {
-		return new GraphQLError('Can not find user company')
-	}
+	let myCompany = await Company.findOne({_id: myCompanyId})
 
 	let vendorIds = myCompany.vendors
 
@@ -170,7 +175,7 @@ companySchema.statics.findUserCompany = async function(userId) {
 
 	let Company = this.model('Company')
 
-	return Company.findOne({members: {'$in': [userId]}, public: true}).lean()
+	return Company.findOne({members: {'$in': [userId]}, creatorCompanyId: null }).lean()
 }
 
 companySchema.statics.addClient = async function(toCid, clientId ) {

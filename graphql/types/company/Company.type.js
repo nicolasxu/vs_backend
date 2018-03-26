@@ -3,11 +3,14 @@ module.exports = `
 type Company {
   _id: String
   name: String
-  public: Boolean
+
   creator: String
-  active: Boolean
+  isActive: Boolean
   invoiceEmails: [String]
+  invoicePersonName: String
   members: [User]
+  clients: [String]
+  vendors: [String]
   templates: [String]
 
   addressLine1: String
@@ -17,9 +20,13 @@ type Company {
   zip: String
   country: String
   tel: String
+  website: String
+  serviceDesc: String
   
   createdAt: String
   updatedAt: String
+  
+  creatorCompanyId: String
 
   err_code: Int
   err_msg: String

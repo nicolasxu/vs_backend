@@ -59,7 +59,7 @@ async function deleteMyClient(obj, args, context, info) {
   }
 
                                                 /* this is company id object, must conver to string to compare */
-  if (foundClient.public === false && foundClient.creatorCompanyId === myCompany.id) {
+  if (foundClient.creatorCompanyId === myCompany.id) {
     // private client
     let deleteResult = await Company.deleteOne({_id: clientId})
     
