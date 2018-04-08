@@ -36,15 +36,13 @@ app.use('/', routes); // added, need to apply routes after body parser
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-var typeDef = require('./graphql/types')
-
-var resolver = require('./graphql/resolvers')
-
-// handle the OPTIONS pre-flight
-app.use('/graphql', cors({origin: ['http://localhost:8090']}))
-
 app.use(utils.verifyToken)
 
+// handle the OPTIONS pre-flight
+// app.use('/graphql', cors({origin: ['http://localhost:8090']}))
+
+var typeDef = require('./graphql/types')
+var resolver = require('./graphql/resolvers')
 var schema = makeExecutableSchema({typeDefs: typeDef, resolvers: resolver})
 app.use('/graphql', graphqlExpress({schema}))
 app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))

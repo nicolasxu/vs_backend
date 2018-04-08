@@ -6,15 +6,23 @@ let store = require('../../../utils/store.js')
 module.exports = getCompanyDetail
 
 
-function getCompanyDetail(obj, args, context, info) {
+async function getCompanyDetail(obj, args, context, info) {
 
   let userId = store.getUserId()
-  console.log('user id in getCompanyDetail:', userId)
+  
   if(!userId) {
     return {
       err_code: 4000,
       err_msg: 'User token is not valid or empty'
     }
   }
-  return Company.findUserCompany(userId)
+  let userCompany = await Company.findUserCompany(userId)
+  if (!userCompany) {
+    return {
+      err_code: 4001,
+      err_msg: 'Can not find user company'
+    }
+  }
+
+  return userCompany
 }

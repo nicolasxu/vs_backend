@@ -55,6 +55,8 @@ async function deleteTemplate(obj, args, context, info) {
   let isMyTemplate = false
   for(let i = 0; i < myTemplates.length; i++) {
     // must convert object id to string!!
+    console.log(myTemplates[i].toString())
+    console.log('target:', templateId)
     if (myTemplates[i].toString() === templateId ) {
       isMyTemplate = true
       break
@@ -76,8 +78,8 @@ async function deleteTemplate(obj, args, context, info) {
     }
   }
   // 5. delete
-  let res = await Template.deleteOne({_id: templateId})
-  // console.log('del result', res)
+  let res = await Template.deleteOne({_id: templateId}).lean()
+  console.log('del result', res)
   // result: { n: 1, ok: 1 },
 
   // 6. update my company
@@ -86,8 +88,8 @@ async function deleteTemplate(obj, args, context, info) {
 
   return {
     _id: templateId,
-    count: res.CommandResult.result.n,
-    message: res.CommandResult.result.ok
+    count: res.result.n,
+    message: res.result.ok
   }
 
 }

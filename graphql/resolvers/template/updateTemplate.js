@@ -29,7 +29,7 @@ async function updateTempate(obj, args, context, info) {
     }
   }  
 
-  // 2. args.id, args.input
+  // 3. args.id, args.input
   let templateId = args.id
   if (!templateId) {
     return {
@@ -65,14 +65,6 @@ async function updateTempate(obj, args, context, info) {
     templateInput.isDefault = args.input.isDefault
   }
 
-  // 3. user company
-  let myCompany = await Company.findUserCompany(userId)
-  if (!myCompany) {
-    return {
-      err_code: 4004,
-      err_msg: 'Can not find user company'
-    }
-  }
   // 4. tempalte id exists in company.templates
   let isMyTemplate = false
   let myTemplates = myCompany.templates
