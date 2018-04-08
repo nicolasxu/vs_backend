@@ -31,12 +31,11 @@ app.use(cookieParser());
 //   credentials: true,
 //   preflightContinue: true
 // })); 
-app.use('*', cors({origin: ['http://localhost:8090'], credentials: true}))
+app.use('*', cors({origin: ['http://localhost:8090'], maxAge: 80400, credentials: true}))
 app.use('/', routes); // added, need to apply routes after body parser
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(utils.verifyToken)
 
 var typeDef = require('./graphql/types')
 var resolver = require('./graphql/resolvers')
