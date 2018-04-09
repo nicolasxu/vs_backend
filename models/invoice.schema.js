@@ -1,12 +1,7 @@
-/* 
-
-*/
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;;
-var Promise = require('bluebird');
-var sanitizer = require('sanitizer');
-mongoose.Promise = Promise;
+var ObjectId = Schema.Types.ObjectId;
+
 var companySchema = require('./company.schema.js');
 var Company = mongoose.model('Company', companySchema);
 var mongoosePaginate = require('mongoose-paginate')
@@ -23,16 +18,19 @@ var invoiceSchema = new Schema ({
 	to: {
 		cid: ObjectId, // company id of receiver company
 		cName: String  // receiver company name
-
 	},
-	invoiceNumber: Number,
+	invoiceNumber: String,
 	amount: Number, 
-	sendDate: String,
-	dueDate: String,
+	sendDate: Number,
+	dueDate: Number,
+	term: String,
 	invoiceRender: String, // contain html and style for rendered invoice
-	status: String, // 'sent', 'viewed', 'declined', 'avoided', 'pending' 'paid', 'partial', 'settled' , 'failed'
+	status: String, // 'generated'(sent/received), 'voided', 'rejected', 
+	viewed: Boolean,
+	paymentStatus: String, // 'not', 'failed', 'pending', 'paid'
+	transactionId: String, 
 	isPaid: Boolean, // is fully paid
-	paidDate: String,
+	paidDate: Number,
 	paidAmount: Number // invoice can be partially paid
 });
 
