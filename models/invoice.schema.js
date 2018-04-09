@@ -8,30 +8,27 @@ var mongoosePaginate = require('mongoose-paginate')
 
 
 var invoiceSchema = new Schema ({
-	from: {
+	fromCompany: {
 		cid: ObjectId, // company id of sender company
 		cName: String, // sender company name
 		uid: ObjectId, // user id who is sending this invoice
-		uEmail: String,// email of the user
 		uName: String
 	},
-	to: {
+	toCompany: {
 		cid: ObjectId, // company id of receiver company
 		cName: String  // receiver company name
 	},
 	invoiceNumber: String,
 	amount: Number, 
-	sendDate: Number,
+	sentDate: Number,
 	dueDate: Number,
 	term: String,
-	invoiceRender: String, // contain html and style for rendered invoice
+	renderedInvoice: String, // contain html and style for rendered invoice
 	status: String, // 'generated'(sent/received), 'voided', 'rejected', 
 	viewed: Boolean,
 	paymentStatus: String, // 'not', 'failed', 'pending', 'paid'
 	transactionId: String, 
-	isPaid: Boolean, // is fully paid
 	paidDate: Number,
-	paidAmount: Number // invoice can be partially paid
 });
 
 

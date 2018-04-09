@@ -6,7 +6,7 @@ type ProductList {
   limit: Int
   offset: Int
   err_code: Int
-  err_msg: String  
+  err_msg: String
 }
 
 `

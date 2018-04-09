@@ -25,6 +25,11 @@ let ProductInput = require('./product/ProductInput.input.js')
 let ProductList = require('./product/ProductList.type.js')
 let ProductTotal = ProductType + ProductInput + ProductList
 
+let InvoiceType = require('./invoice/Invoice.type.js')
+let InvoiceInput = require('./invoice/InvoiceInput.input.js')
+let InvoiceList = require('./invoice/InvoiceList.type.js')
+let InvoiceTotal = InvoiceType + InvoiceInput + InvoiceList
+
 let query = require('./queryEntry.query.js')
 let mutation = require('./mutationEntry.mutation.js')
 
@@ -34,6 +39,7 @@ let totalType = commonTotal +
                 RequestTotal +
                 TemplateTotal +
                 ProductTotal + 
+                InvoiceTotal + 
                 query + 
                 mutation
 
