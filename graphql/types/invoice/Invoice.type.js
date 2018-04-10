@@ -16,8 +16,10 @@ module.exports = `
     _id: String
     fromCompany: FromCompany
     toCompany: ToCompany
+    templateId: String
+    viewId: String
     invoiceNumber: String
-    amount: Float
+    amount: Int
     sentDate: Int
     dueDate: Int
     term: String

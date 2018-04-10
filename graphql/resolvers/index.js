@@ -34,6 +34,11 @@ const getProductDetail = require('./product/getProductDetail.js')
 const getProducts = require('./product/getProducts.js')
 const findProducts = require('./product/findProducts.js')
 
+const createInvoice = require('./invoice/createInvoice.js')
+const voidInvoice = require('./invoice/voidInvoice.js')
+const getInvoiceList = require('./invoice/getInvoiceList.js')
+const getInvoiceById = require('./invoice/getInvoiceById.js')
+
 let resolver = {
   Query: {
     user: userDetail,
@@ -52,7 +57,10 @@ let resolver = {
 
     product: getProductDetail,
     products: getProducts,
-    productFind: findProducts
+    productFind: findProducts,
+
+    invoice: getInvoiceById,
+    invoices: getInvoiceList    
 
   },
   Mutation: {
@@ -74,7 +82,10 @@ let resolver = {
 
     createProduct: createProduct,
     updateProduct: updateProduct,
-    deleteProduct: deleteProduct
+    deleteProduct: deleteProduct,
+
+    createInvoice: createInvoice,
+    voidInvoice: voidInvoice
 
   }
 }

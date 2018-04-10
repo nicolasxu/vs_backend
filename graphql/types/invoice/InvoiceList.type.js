@@ -6,7 +6,7 @@ module.exports = `
     limit: Int
     offset: Int
     err_code: Int
-    err_msg: String     
+    err_msg: String
   }
 
 `

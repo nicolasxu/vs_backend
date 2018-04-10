@@ -25,6 +25,10 @@ type Mutation {
   createProduct(input: ProductInput) : Product
   updateProduct(id: String, input: ProductInput) : Product
   deleteProduct(id: String): RecordDelete
+  
+  createInvoice(input: InvoiceInput): Invoice
+  voidInvoice(id: String): Invoice
+  payInvoice(id: String): Invoice
 
 
 }

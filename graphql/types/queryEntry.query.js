@@ -27,6 +27,11 @@ type Query {
   product(id: String): Product
   productFind(searchStr: String): ProductList
 
+  invoice(id: String): Invoice
+  invoices(offset: Int, limit: Int): InvoiceList
+
+
+
 }
 
 `
