@@ -17,7 +17,12 @@ async function searchClients(obj, args, context, info) {
       err_msg: 'User does not have a company'
     }    
   }
+  let res = await Company.searchClients(userId, args.query)
 
-
-
+  return {
+    docs: res,
+    total: res.length,
+    limit: 10,
+    offset: 0
+  }
 }

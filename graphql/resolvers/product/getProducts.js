@@ -10,11 +10,8 @@ const Product = require('../../../models').Product
 
 module.exports = getProducts
 
-
 async function getProducts(obj, args, context, info) {
   
-
-
   // 1. check user login 
   let userId = store.getUserId()
 

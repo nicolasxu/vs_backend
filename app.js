@@ -41,7 +41,7 @@ var typeDef = require('./graphql/types')
 var resolver = require('./graphql/resolvers')
 var schema = makeExecutableSchema({typeDefs: typeDef, resolvers: resolver})
 app.post('/graphql', utils.verifyToken, graphqlExpress({schema}))
-app.post('/graphiql', utils.verifyToken, graphiqlExpress({endpointURL: '/graphql'}))
+app.use('/graphiql', utils.verifyToken, graphiqlExpress({endpointURL: '/graphql'}))
 
 
 

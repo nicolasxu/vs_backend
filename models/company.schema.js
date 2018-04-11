@@ -172,7 +172,7 @@ companySchema.statics._searchVendorsOrClients = async function (key, userId, que
 	let Company = this.model('Company')
 	let companyIds = (await this.findUserCompany(userId))[key]
 	let reg = new RegExp('^' + query, 'i')
-	let res = await Company.find({_id: {'$in': companyIds}, name: {$regex: reg} } )
+	let res = await Company.find({_id: {'$in': companyIds}, name: {$regex: reg} } ).limit(10)
 	return res
 
 }
