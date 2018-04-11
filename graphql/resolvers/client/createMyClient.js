@@ -10,18 +10,9 @@ async function createMyClient(obj, args, context, info) {
 
   // 1. user login
   let userId = store.getUserId()
-  if(!userId) {
-    return {
-      err_code: 4000,
-      err_msg: 'User token is not found'
-    }
-  }
-
-
-
 
   // 2. my company exists
-  let myCompany = await Company.findOne({members: {'$in': [userId]}})
+  let myCompany = await Company.findUserCompany(userId)
 
   if (!myCompany) {
     return {

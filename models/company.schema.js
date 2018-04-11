@@ -11,7 +11,10 @@ var mongoosePaginate = require('mongoose-paginate')
 
 
 var companySchema = new Schema ({
-	name: String,
+	name: {
+		type: String,
+		index: true
+	},
 	addressLine1: String,
 	addressLine2: String,
 	city: String,
@@ -26,7 +29,10 @@ var companySchema = new Schema ({
 	updated: String,
 	invoiceEmails: [String], // notification email address
 	invoicePersonName: String, // person will be responsible for receiving and paying invoice in this company
-	members: [ObjectId], // contains all members, including the creator
+	members: {
+		type: [ObjectId],
+		index: true
+	}, // contains all members, including the creator
 	vendors: [ObjectId],
 	clients: [ObjectId],
 	templates: [ObjectId], // array of invoice template id
@@ -149,6 +155,26 @@ companySchema.statics.getMyClientDetail = async function (userId, clientId) {
   let clientDetail = await Company.findOne({_id: clientId})
 
   return clientDetail
+}
+
+companySchema.statics.searchClients = async function(userId, query) {
+
+	return this._searchVendorsOrClients('clients', userId, query)
+}
+
+companySchema.statics.searchVendors = async function(userId, query) {
+	return this._searchVendorsOrClients('vendors', userId, query)
+}
+
+companySchema.statics._searchVendorsOrClients = async function (key, userId, query) {
+	// key is 'vendors' or 'clients'
+
+	let Company = this.model('Company')
+	let companyIds = (await this.findUserCompany(userId))[key]
+	let reg = new RegExp('^' + query, 'i')
+	let res = await Company.find({_id: {'$in': companyIds}, name: {$regex: reg} } )
+	return res
+
 }
 
 companySchema.statics.getMyVendorDetail = async function (userId, vendorId) {

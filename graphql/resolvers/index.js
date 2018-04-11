@@ -8,6 +8,7 @@ const updateMyClient = require('./client/updateMyClient.js')
 
 const myClients = require('./client/listMyClients.js')
 const getMyClientDetail = require('./client/getMyClientDetail.js')
+const searchClients = require('./client/searchClients.js')
 
 const listMyVendors = require('./vendor/listMyVendors.js')
 const vendorDetail = require('./vendor/vendorDetail.js')
@@ -45,6 +46,7 @@ let resolver = {
     myCompany: myCompanyDetail,
     clients: myClients,
     clientDetail: getMyClientDetail,
+    clientsSearch: searchClients,
 
     vendors: listMyVendors,
     vendor: vendorDetail,

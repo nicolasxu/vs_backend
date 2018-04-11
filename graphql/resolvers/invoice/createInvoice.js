@@ -123,11 +123,11 @@ async function createInvoice(obj, args, context, info) {
     items: items,
     customData: customData
   }
+  // 9. render invoice
+
   let dbData = {}
 
-  // 9. generate viewId
-
-  // 10. render invoice
+  // 10. generate viewId
 
   // 11. create mongoDB record
 

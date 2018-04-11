@@ -14,14 +14,18 @@ module.exports = getProducts
 async function getProducts(obj, args, context, info) {
   
 
+
   // 1. check user login 
   let userId = store.getUserId()
-  if (!userId) {
-    return {
-      err_code: 4000,
-      err_msg: 'User token is empty or not valid'
-    }
-  }
+
+/*
+  // *** debug ***
+
+  let res = await Company.searchClients(userId, 'nick88')
+  console.log('search res', res)
+
+  // *** debug ***
+*/
 
   // 2. get my company
   let myCompany = await Company.findUserCompany(userId)
