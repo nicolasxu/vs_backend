@@ -1,11 +1,13 @@
 module.exports = `
   
   input InvoiceInput {
-    fromCompanyId: String
+    
     toCompanyId: String
     templateId: String
+    items: String
+    customData: String
     amount: Int
-    sentDate: Int
+    invoiceDate: Int
     dueDate: Int
     term: String
   }
