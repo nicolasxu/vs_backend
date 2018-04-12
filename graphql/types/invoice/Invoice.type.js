@@ -1,15 +1,21 @@
 module.exports = `
   
   type FromCompany {
-    cId: String
-    cName: String
-    uId: String
-    uName: String
+    companyId: String
+    name: String
+    userId: String
+    userName: String
   }
 
   type ToCompany {
-    cId: String
-    cName: String
+    companyId: String
+    name: String
+  }
+
+  type InvoiceTerm {
+    _id: String
+    day: Int
+    desc: String
   }
   
   type Invoice {
@@ -19,10 +25,10 @@ module.exports = `
     templateId: String
     viewId: String
     invoiceNumber: String
-    amount: Int
-    sentDate: Int
-    dueDate: Int
-    term: String
+    total: Int
+    invoiceDate: String
+    dueDate: String
+    term: InvoiceTerm
     renderedInvoice: String
     status: String
     viewed: Boolean

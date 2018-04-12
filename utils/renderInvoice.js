@@ -15,6 +15,6 @@ function renderInvoice(invoiceRenderData) {
   let css = '<style type="text/css">' + inv.template.css + '</style>' 
   $('invoice').append(css)
 
-  return $.html()
+  return $.html('invoice')
 
 }

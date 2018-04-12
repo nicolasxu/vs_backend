@@ -9,7 +9,7 @@ const Company = require('../../../models').Company
 const Template = require('../../../models').Template
 const Invoice = require('../../../models').Invoice
 const _ = require('lodash')
-const intToDateStr = require('../../../utils/intToDateStr.js')
+const intStrToDateStr = require('../../../utils/intStrToDateStr.js')
 const renderInvoice = require('../../../utils/renderInvoice.js')
 
 module.exports = createInvoice
@@ -22,8 +22,8 @@ async function createInvoice(obj, args, context, info) {
 
   // 2. toCompanyId is valid
   let toCompanyId = args.input.toCompanyId
-  let tValid = mongoose.Types.ObjectId.isValid(toCompanyId)
-  if (!tValid) {
+  let toIdValid = mongoose.Types.ObjectId.isValid(toCompanyId)
+  if (!toIdValid) {
     return {
       err_code: 4001,
       err_msg: 'To company id is not valid'
@@ -31,8 +31,8 @@ async function createInvoice(obj, args, context, info) {
   }
   // 3. templateId is valid
   let templateId = args.input.templateId
-  let tValid = mongoose.Types.ObjectId.isValid(templateId)
-  if (!tValid) {
+  let tempIdValid = mongoose.Types.ObjectId.isValid(templateId)
+  if (!tempIdValid) {
     return {
       err_code: 4002,
       err_msg: 'Template id is not valid'
@@ -48,9 +48,21 @@ async function createInvoice(obj, args, context, info) {
       err_msg: 'Invoice date or due date is missing'
     }
   }
-  if (dueDate < invoiceDate) {
+
+  // 5. make sure date is integer string
+  let dueDateNumber = parseInt(dueDate)
+  let invoiceDateNumber = parseInt(invoiceDate)
+  if (isNaN(dueDateNumber) || isNaN(invoiceDateNumber) ) {
     return {
       err_code: 4004,
+      err_msg: 'Date integer string can not be parse to number'
+    }
+  }
+
+
+  if (dueDateNumber < invoiceDateNumber) {
+    return {
+      err_code: 4005,
       err_msg: 'dueDate should be after invoice date'
     }
   }
@@ -59,7 +71,7 @@ async function createInvoice(obj, args, context, info) {
   let fromCompanyRaw = await Company.findUserCompany(userId)
   if (!fromCompanyRaw) {
     return {
-      err_code: 4005,
+      err_code: 4006,
       err_msg: 'User company does not exist'
     }
   }
@@ -68,7 +80,7 @@ async function createInvoice(obj, args, context, info) {
   let toCompanyRaw = await Company.getMyClientDetail(userId, toCompanyId)
   if (!toCompanyRaw) {
     return {
-      err_code: 4006,
+      err_code: 4007,
       err_msg: 'Can not find to company in your client list'
     }
   }
@@ -77,13 +89,13 @@ async function createInvoice(obj, args, context, info) {
   let template = await Template.findOne({_id: templateId})
   if (!template) {
     return {
-      err_code: 4007,
+      err_code: 4008,
       err_msg: 'Can not find template by templateId'
     }
   }
   // 7. generate invoice number
   // logic: get max sent invoice number, then plus 1
-  let maxNumInv = await Invoice.findOne({"fromCompany.cid": fromCompanyRaw._id})
+  let maxNumInv = await Invoice.findOne({"fromCompany.companyId": fromCompanyRaw._id})
                         .sort({number: -1})
                         .limit(1)
                         .lean()
@@ -94,7 +106,7 @@ async function createInvoice(obj, args, context, info) {
     currentNumber = maxNumInv.number + 1
   }
 
-  console.log(maxNumInv)
+  // console.log(maxNumInv)
 
   // 8. parse json dasta
   let items 
@@ -103,7 +115,7 @@ async function createInvoice(obj, args, context, info) {
     items = JSON.parse(args.input.items)
   } catch (e) {
     return {
-      err_code: 4008,
+      err_code: 4009,
       err_msg: 'Parse items data error'
     }
   }
@@ -115,7 +127,7 @@ async function createInvoice(obj, args, context, info) {
     
   } catch (e) {
     return {
-      err_code: 4009,
+      err_code: 4010,
       err_msg: 'Parsing customData error'
     }
   }
@@ -125,15 +137,15 @@ async function createInvoice(obj, args, context, info) {
   // 8. fill invoice status, payment status
   let renderData = {
     customData: customData,
-    dueDate: intToDateStr(dueDate),
-    fromCompany: fromCompany,
-    invoiceDate: intToDateStr(invoiceDate),  // render need string, no calculation in render at all    
+    dueDate: intStrToDateStr(dueDate),
+    fromCompany: fromCompanyRaw,
+    invoiceDate: intStrToDateStr(invoiceDate),  // render need string, no calculation in render at all    
     items: items,
     note: args.input.note,
     number: currentNumber,
     template: template,
     term: args.input.term,
-    toCompany: toCompany,
+    toCompany: toCompanyRaw,
     total: args.input.total
   }
   // 9. render invoice
@@ -143,8 +155,8 @@ async function createInvoice(obj, args, context, info) {
   } catch (e) {
     console.log('render invoice error', e)
     return {
-      err_code: 4010,
-      err_msg: 'Render invoice error'
+      err_code: 4011,
+      err_msg: 'Render invoice error, invoice is not sent'
     }
   }
   // 10. generate viewId
@@ -154,14 +166,14 @@ async function createInvoice(obj, args, context, info) {
   let dbData = {}
   
   dbData.fromCompany = {}
-  dbData.fromCompany.cId = fromCompanyRaw._id
-  dbData.fromCompany.cName = fromCompany.name
-  dbData.fromCompany.uId = userId
-  dbData.fromCompany.uName = store.getUserFullname()
+  dbData.fromCompany.companyId = fromCompanyRaw._id
+  dbData.fromCompany.name = fromCompanyRaw.name
+  dbData.fromCompany.userId = userId
+  dbData.fromCompany.userName = store.getUserFullname()
 
   dbData.toCompany = {}
-  dbData.toCompany.cId = toCompany._id
-  dbData.toCompany.cName = toCompany.name
+  dbData.toCompany.companyId = toCompanyRaw._id
+  dbData.toCompany.name = toCompanyRaw.name
   dbData.templateId = templateId
   dbData.viewId = viewId
   dbData.number = currentNumber

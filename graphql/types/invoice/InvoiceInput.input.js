@@ -1,6 +1,6 @@
 module.exports = `
   
-  input InvoiceTerm {
+  input InvoiceTermInput {
     day: Int
     desc: String
   }
@@ -11,9 +11,9 @@ module.exports = `
     items: String
     customData: String
     total: Int
-    invoiceDate: Int
-    dueDate: Int
-    term: InvoiceTerm
+    invoiceDate: String
+    dueDate: String
+    term: InvoiceTermInput
     note: String
   }
 
