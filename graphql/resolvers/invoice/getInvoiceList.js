@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const store = require('../../../utils/store.js')
 const Company = require('../../../models').Company
-const Product = require('../../../models').Invoice
+const Invoice = require('../../../models').Invoice
 
 module.exports = getInvoiceList
 
