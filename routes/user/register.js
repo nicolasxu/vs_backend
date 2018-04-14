@@ -2,12 +2,13 @@
 
 var User = require('../../models/').User
 var messages = require('../messages.js')
-
+const sendEmail = require('../../utils/sendEmail.js')
+const store = require('../../utils/store.js')
 var _ = require('lodash')
 
 module.exports = registerUser
 
-function registerUser(req, res, next) {
+async function registerUser(req, res, next) {
 
   var userJson = {email: req.body.email, password: req.body.password}
   console.log(userJson)
@@ -22,53 +23,40 @@ function registerUser(req, res, next) {
     return;
   }
 
-  // 3. validate unique email
-  User.isRegisteredAlready(userJson)
-    .then(function (isRegistered)  {
-      if(isRegistered) {
-        res.status(200).json(messages.accountExist);
-      } else {
-        User.createUser(userJson)
-          .then (function(result) {
-              console.log('create user success', result)
-              //res.status(200).json(messages.createUserSuccess);
-              /*
-              { n: 1, nModified: 1, ok: 1 }
-              */
-              if (result.ok === 1) {
-                // succeed
-                return userJson.email
-              } else {
-                return ''
-              }
-            }
-          )
-          .then ((userEmail) => {
-            if (userEmail) {
-              // find one, return user detail
-              User.findOne({email: userEmail})
-                .then((oneUser) => {
-                  if(!oneUser) {
-                    res.status(200).json(messages.createUserError)
-                    return
-                  } else {
-                    let returnJson = _.cloneDeep(messages.createUserSuccess)
-                    returnJson.data.user = oneUser.toJSON()
-                    delete returnJson.data.user.password
-                    // login user by setting session
-                    //req.session.user = oneUser
-                    //req.session.authenticated = true
+  // 3. is registered
+  let isRegistered = await User.isRegistered(userJson.email)
+  if (isRegistered) {
+    res.status(200).json(messages.accountExist)
+    return
+  }
 
-                    res.status(200).json(returnJson)
-                    return
-                  }
-                })
-            } else {
-              // return error msg
-              res.status(200).json(messages.createUserError)
-              return
-            }
-          }) 
-      }
-    })
+  // 4. create User
+  let createRes = await User.createUser(userJson)
+  if (createRes.ok !== 1 && createRes.n !== 1) {
+    res.status(200).json(messages.createUserError)
+    return
+  }
+
+  // 5. get created user
+  let newUser = await User.findOne({email: userJson.email}).lean()
+  let verifyPath = '/verifyemail/' + newUser.verificationHash
+  let appDomain = store.getDomainName()
+  let query = '?email=' + encodeURIComponent(userJson.email)
+  // 5. send verification email
+  sendEmail('verify_email', 
+    {email: userJson.email, verificationLink: appDomain + verifyPath + query}, 
+    userJson.email)
+
+  // 6. return created user without password, verification hash
+  let returnJson = _.cloneDeep(messages.createUserSuccess)
+  returnJson.data.user = {
+    _id: newUser._id,
+    email: newUser.email, 
+    role: newUser.role,
+    active: newUser.active,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,    
+  }
+  res.status(200).json(returnJson)
+
 }

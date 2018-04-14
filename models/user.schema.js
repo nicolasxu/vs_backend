@@ -5,6 +5,7 @@ var bcrypt = require('bcryptjs');
 var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
 var _ = require('lodash')
+const generateSafeId = require('generate-safe-id');
 var mongoosePaginate = require('mongoose-paginate')
 
 mongoose.Promise = Promise;
@@ -16,12 +17,16 @@ var userSchema = new Schema ({
 	active: Boolean,
 	firstName: String,
 	lastName: String,
+	verificationHash: String,
+	resetPwdHash: String,
+	resetPwdHashTime: String, 
 	updatedAt: String,
+	createdAt: String
 });
 
-userSchema.statics.isRegisteredAlready = async function (user) {
+userSchema.statics.isRegistered = async function (email) {
 	var User = this.model('User'); // get the model 
-	var email = user.email;
+	
 	var isRegistered = false; 
 
 	var docs = await User.find({email: email, active: true})
@@ -65,7 +70,22 @@ userSchema.statics.createUser = async function (userInput) {
 
 	let hash = await bcrypt.hash(user.password, 8)
 	user.password = hash
-	return User.update({email: user.email}, user, {upsert: true})
+	user.verificationHash = generateSafeId()
+	return User.update({email: user.email}, user, {upsert: true, new: true})
+}
+
+userSchema.statics.verifyEmail = async function(input) {
+	let email = input.email
+	let hash = input.hash
+
+	const User = this.model('User')
+
+	return User.findOneAndUpdate(
+		{email: email, active: false, verificationHash: hash }, 
+		{$set: {active: true, verificationHash: ''}}, 
+		{new: true, upsert: false}
+	)
+
 }
 
 userSchema.statics.login = async function (user) {

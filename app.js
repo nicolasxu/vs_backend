@@ -13,8 +13,6 @@ var routes = require('./routes');
 var { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 var { makeExecutableSchema } = require('graphql-tools')
 
-// var sendEmail = require('./utils/sendEmail.js')
-// sendEmail('verify_email', {name: 'nick'}, 'xu.shenxin@gmail.com')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

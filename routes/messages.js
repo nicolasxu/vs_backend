@@ -5,6 +5,12 @@ module.exports = {
 			message: 'password is wrong or account doesn not exist'
 		}
 	},
+	createUserError: {
+		code: 3002,
+		data: {
+			message: 'create user error'
+		}
+	},
 	createTokenSuccess : {
 		code: 2000,
 		data: {

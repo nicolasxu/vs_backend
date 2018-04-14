@@ -12,15 +12,6 @@ const email = new Email({
   },
   send: true,
   transport: emailSecret, 
-  //  {
-  //   host: 'smtp.gmail.com',
-  //   port: 465,
-  //   secure: true,
-  //   auth: {
-  //     user: 'xu.shenxin@gmail.com',
-  //     pass: '123456xsx'
-  //   }
-  // },
   views: {
     root: path.resolve('./email_template'), // relative to project root, not current file
     options: {
