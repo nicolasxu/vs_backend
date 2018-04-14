@@ -24,7 +24,7 @@ module.exports = `
     toCompany: ToCompany
     templateId: String
     viewId: String
-    invoiceNumber: String
+    number: String
     total: Int
     invoiceDate: String
     dueDate: String

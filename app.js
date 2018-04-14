@@ -13,6 +13,12 @@ var routes = require('./routes');
 var { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 var { makeExecutableSchema } = require('graphql-tools')
 
+
+var sendEmail = require('./test_email.js')
+sendEmail()
+
+// require('./test_email2.js')
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

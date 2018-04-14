@@ -1,6 +1,6 @@
 
 let jwt = require('jsonwebtoken')
-const config = require('../config/config.js')
+const config = require('../config/token.secret.js')
 let store = require('./store.js')
 
 module.exports = verifyToken

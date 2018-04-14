@@ -1,1 +1,3 @@
 node_modules
+/config/email.secret.js
+/config/token.secret.js

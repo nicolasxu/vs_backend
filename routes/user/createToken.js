@@ -4,7 +4,7 @@ var message = require('../messages.js')
 var _ = require('lodash')
 var jwt = require('jsonwebtoken')
 
-const TOKEN_SECRET = require('../../config/config.js').token_secret
+const TOKEN_SECRET = require('../../config/token.secret.js').token_secret
 
 module.exports = createToken
 
