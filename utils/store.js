@@ -22,7 +22,7 @@ module.exports = {
   },
   getDomainName: function () {
     if (process.env.NODE_ENV === 'production') {
-      return 'https://vitaspider.com'
+      return 'https://vitaspider.com/#'
     } else {
       return 'http://localhost:8090/#'
     }

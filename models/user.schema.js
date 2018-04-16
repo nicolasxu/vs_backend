@@ -2,13 +2,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var bcrypt = require('bcryptjs');
-var Promise = require('bluebird');
 var sanitizer = require('sanitizer');
 var _ = require('lodash')
 const generateSafeId = require('generate-safe-id');
 var mongoosePaginate = require('mongoose-paginate')
 
-mongoose.Promise = Promise;
 
 var userSchema = new Schema ({
 	email: String, 
@@ -72,6 +70,11 @@ userSchema.statics.createUser = async function (userInput) {
 	user.password = hash
 	user.emailVerifyHash = generateSafeId()
 	return User.update({email: user.email}, user, {upsert: true, new: true})
+}
+
+userSchema.methods.updatePwd = async function (newPwd) {
+	let hash = await bcrypt.hash(newPwd, 8)
+	this.password = hash
 }
 
 userSchema.statics.verifyEmail = async function(input) {

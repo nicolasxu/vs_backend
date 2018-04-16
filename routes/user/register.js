@@ -1,10 +1,10 @@
 // this function handles login only
 
-var User = require('../../models/').User
+const User = require('../../models/').User
 var messages = require('../messages.js')
 const sendEmail = require('../../utils/sendEmail.js')
 const store = require('../../utils/store.js')
-var _ = require('lodash')
+const _ = require('lodash')
 
 module.exports = registerUser
 

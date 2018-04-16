@@ -10,7 +10,8 @@ const email = new Email({
     from: 'xu.shenxin@gmail.com' // replace with support email in production
 
   },
-  send: true,
+  send: true,  // if send email for real
+  preview: false, // if open rendered email in browser
   transport: emailSecret, 
   views: {
     root: path.resolve('./email_template'), // relative to project root, not current file
@@ -27,7 +28,7 @@ function sendEmail(templateName, data = {}, toEmail) {
   if (!templateName || !toEmail) {
     return
   }
-  email.send({
+  return email.send({
     template: templateName,
     message: {
       to: toEmail

@@ -17,6 +17,12 @@ module.exports = {
 			message: 'Create token success'
 		}
 	},
+	accountExist: {
+		code: 3003,
+		data: {
+			message: 'Account exist'
+		}
+	},
 	createUserSuccess: {
 		code: 2000,
 		data: {
