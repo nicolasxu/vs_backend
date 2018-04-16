@@ -39,7 +39,7 @@ async function registerUser(req, res, next) {
 
   // 5. get created user
   let newUser = await User.findOne({email: userJson.email}).lean()
-  let verifyPath = '/verifyemail/' + newUser.verificationHash
+  let verifyPath = '/verifyemail/' + newUser.emailVerifyHash
   let appDomain = store.getDomainName()
   let query = '?email=' + encodeURIComponent(userJson.email)
   // 5. send verification email

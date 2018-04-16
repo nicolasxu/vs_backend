@@ -17,7 +17,7 @@ var userSchema = new Schema ({
 	active: Boolean,
 	firstName: String,
 	lastName: String,
-	verificationHash: String,
+	emailVerifyHash: String,
 	resetPwdHash: String,
 	resetPwdHashTime: String, 
 	updatedAt: String,
@@ -70,7 +70,7 @@ userSchema.statics.createUser = async function (userInput) {
 
 	let hash = await bcrypt.hash(user.password, 8)
 	user.password = hash
-	user.verificationHash = generateSafeId()
+	user.emailVerifyHash = generateSafeId()
 	return User.update({email: user.email}, user, {upsert: true, new: true})
 }
 
@@ -81,8 +81,8 @@ userSchema.statics.verifyEmail = async function(input) {
 	const User = this.model('User')
 
 	return User.findOneAndUpdate(
-		{email: email, active: false, verificationHash: hash }, 
-		{$set: {active: true, verificationHash: ''}}, 
+		{email: email, active: false, emailVerifyHash: hash }, 
+		{$set: {active: true, emailVerifyHash: ''}}, 
 		{new: true, upsert: false}
 	)
 
