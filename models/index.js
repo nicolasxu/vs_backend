@@ -5,6 +5,7 @@ const invoiceSchema = require('./invoice.schema.js');
 const invoiceTemplateSchema = require('./template.schema.js');
 const requestSchema = require('./request.schema.js')
 const productSchema = require('./product.schema.js')
+const planSchema = require('./plan.schema.js')
 // the logic of mongoose is:
 //   1. use new Schema({}) to create a schema
 //   2. use mongoose.model('ModelName', schema) to create Model
@@ -18,7 +19,8 @@ const Models = {
 	Invoice: mongoose.model('Invoice', invoiceSchema),
 	Template: mongoose.model('Template', invoiceTemplateSchema),
   Request: mongoose.model('Request', requestSchema),
-  Product: mongoose.model('Product', productSchema)
+  Product: mongoose.model('Product', productSchema),
+  Plan: mongoose.model('Plan', planSchema)
 }
 
 module.exports = Models;

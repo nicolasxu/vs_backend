@@ -42,9 +42,6 @@ var companySchema = new Schema ({
 										 // company who create this company, empty if it is user creates its own company
 										 
 										 // only company created by other company have this set to creator company id
-	//public: Boolean    // true if it is created by user, not belong to other company
-	/* use creatorCompanyId and public fields to determine if public company together */
-	// todo: remove this field
 });
 
 // Can only be used to create my own company, not client or vendor
