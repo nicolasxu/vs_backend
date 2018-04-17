@@ -9,5 +9,5 @@ module.exports = {
 
 
 function mountRoutes(router) {
-  router.post('/api/invoicepdf/:viewid', invoicePdf)
+  router.get('/api/invoicepdf/:viewid', invoicePdf)
 }

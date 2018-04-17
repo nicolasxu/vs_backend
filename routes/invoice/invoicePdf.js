@@ -41,19 +41,24 @@ async function invoicePdf(req, res, next) {
   `
   let part2 = `
 
-  
-
   `
 
   let invoiceStr = part1 + invoice.renderedInvoice + part2
 
-  pdf.create(invoiceStr, options).toFile('./test.pdf', (err, pdfResult) => {
+  pdf.create(invoiceStr, options).toBuffer((err, buffer) => {
     if (err) {
       console.log('error:', err)
-      res.josn('error')
+      res.status(200).josn({
+        err_code: 4002,
+        err_msg: 'Generating pdf buffer error'
+      })
     } else {
-      console.log('pdfResult', pdfResult)
-      res.json('done')
+      let fileName = 'Inv-' + invoice.number + ' ' + invoice.toCompany.name + '.pdf'
+      res.contentType('application/pdf')
+      res.set('x-filename', 'abcinvoice.pdf')
+      res.set('Content-disposition', 'attachment; filename=' + fileName)
+      res.send(buffer)
+
     }
   } )
 }
