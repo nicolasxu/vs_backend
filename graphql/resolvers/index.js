@@ -2,6 +2,8 @@
 const userDetail = require('./user/userDetail.resolver.js')
 const createMyCompany = require('./company/createMyCompany.resolver.js')
 const myCompanyDetail = require('./company/companyDetail.resolver.js')
+const getCompanyByEmail = require('./company/getCompanyByEmail.js')
+
 const createMyClient = require('./client/createMyClient.js')
 const deleteMyClient = require('./client/deleteMyClient.js')
 const updateMyClient = require('./client/updateMyClient.js')
@@ -44,6 +46,7 @@ let resolver = {
   Query: {
     user: userDetail,
     myCompany: myCompanyDetail,
+    getCompanyByEmail: getCompanyByEmail,
     clients: myClients,
     clientDetail: getMyClientDetail,
     clientsSearch: searchClients,
@@ -62,7 +65,7 @@ let resolver = {
     productFind: findProducts,
 
     invoice: getInvoiceById,
-    invoices: getInvoiceList    
+    invoices: getInvoiceList
 
   },
   Mutation: {

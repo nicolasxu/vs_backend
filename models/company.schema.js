@@ -61,7 +61,7 @@ companySchema.statics.createMyCompany = async function (companyJson) {
 
 	// create company
 	var Company = this.model('Company')
-//	var userOid = new ObjectId(userId)
+	//	var userOid = new ObjectId(userId)
 	
 	// companyJson.members = [userId];
 	companyJson.active = true;

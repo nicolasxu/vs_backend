@@ -20,6 +20,7 @@ type Query {
   vendors(offset: Int, limit: Int): CompanyList
   vendorDetail: Company
   myCompany: Company
+  getCompanyByEmail(email: String): Company
 
   templates: TemplateList
   template(id: String): Template
