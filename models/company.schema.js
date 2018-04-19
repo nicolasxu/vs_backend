@@ -198,7 +198,8 @@ companySchema.statics.findUserCompany = async function(userId) {
 
 	let Company = this.model('Company')
 
-	return Company.findOne({members: {'$in': [userId]}, creatorCompanyId: null }).lean()
+	return Company.findOne({members: {'$in': [userId]}, creatorCompanyId: null })
+	// return a model instance
 }
 
 companySchema.statics.addClient = async function(toCid, clientId ) {
@@ -220,6 +221,31 @@ companySchema.statics.addVendor = async function (toCid, vendorId) {
 	let Company = this.model('Company')
 
 	return Company.findOneAndUpdate({_id: toCid}, {$push: {vendors: vendorId}}, {upsert: false, new: true})
+}
+
+companySchema.methods.isEmailInPrivateClients = async function (email) {
+	if (!email) {
+		false
+	}
+
+	let clientIds = this.clients
+
+	let Company = this.model('Company')
+
+	let clients = await Company.find({_id:{$in: clientIds}})
+
+	if (clients.length === 0) {
+		return false
+	}
+
+	for (let i = 0; i < clients.length; i++) {
+		if (clients[i].invoiceEmails.join(', ').indexOf(email) > -1) {
+			return true
+		}
+	}
+
+	return false
+
 }
 
 

@@ -18,7 +18,6 @@ input CompanyInput {
   tel: String
   website: String
   serviceDesc: String
-  invoiceEmails: [String]
   invoicePersonname: String
 
 }
