@@ -227,7 +227,8 @@ companySchema.methods.isEmailInPrivateClients = async function (email) {
 	if (!email) {
 		false
 	}
-
+	email = email.toLowerCase()
+	
 	let clientIds = this.clients
 
 	let Company = this.model('Company')
@@ -239,7 +240,7 @@ companySchema.methods.isEmailInPrivateClients = async function (email) {
 	}
 
 	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].invoiceEmails.join(', ').indexOf(email) > -1) {
+		if (clients[i].invoiceEmails.join(', ').toLowerCase().indexOf(email) > -1) {
 			return true
 		}
 	}

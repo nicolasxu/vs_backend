@@ -4,7 +4,7 @@ let { GraphQLError } = require('graphql')
 
 module.exports = deleteMyClient
 
-
+// only for deleting privat client, if live client, return error
 async function deleteMyClient(obj, args, context, info) {
 
   // 1. check if user login by checking store user id
@@ -29,48 +29,69 @@ async function deleteMyClient(obj, args, context, info) {
 
   }
 
-  // 4. check if client id in company's clients array, 
-  //   if so, remove id from my company clients array,
-  //   if not, return error, stop executing the code after this. 
-  let myCompany = await Company.findOne({
-    members: {'$in': [userId]}, 
-    clients: {'$in': [clientId]}
-  })
-
+  // 2. get my company
+  let myCompany = await Company.findUserCompany(userId)
   if (!myCompany) {
-    return new GraphQLError('client is not in your client array')
-  }
-
-  let delResult = await Company.findOneAndUpdate({
-    members: {'$in': [userId]}, 
-    clients: {'$in': [clientId]}
-  }, { $pullAll: {clients: [clientId]} }, {upsert: false, new: true})
-
-  // 5. delete company document by client id if it is private company.
-  //    If not private company, do nothing
-
-  let foundClient = await Company.findOne({_id: clientId}).lean()
-  if (!foundClient) {
     return {
-      err_code: '4002',
-      err_msg: 'Orphan client id deleted'
+      err_code: 4002,
+      err_msg: 'Can not find user company'
     }
-
   }
 
-                                                /* this is company id object, must conver to string to compare */
-  if (foundClient.creatorCompanyId === myCompany.id) {
-    // private client
-    let deleteResult = await Company.deleteOne({_id: clientId})
-    
+  // 3. is my client
+  let isMyClient = false
+  let clients = myCompany.clients
+  for(let i = 0; i < clients.length; i++) {
+    if (clients[i].toString() === clientId) {
+      isMyClient = true
+      break
+    }
+  }
+  if (!isMyClient) {
+    return {
+      err_code: 4003,
+      err_msg: 'Company with this clientId is not your client'
+    }
   }
 
-  // 6. return this type:
+  // 4. company record exists
+  let thisClient = await Company.findOne({_id: clientId})
+  if (!thisClient) {
+    return {
+      err_code: 4004,
+      err_msg: 'Can not find Company record by this clientId'
+    }
+  }
+
+  // 5. is my private company
+  let isCreatedByMyCompany = thisClient.creatorCompanyId.toString() === myCompany._id.toString()
+  if (!isCreatedByMyCompany) {
+    return {
+      err_code: 4005,
+      err_msg: 'Client is not your private record'
+    }
+  }
+
+  // 6. delete this company by clientId
+  let deleteRes = await Company.deleteOne({_id: clientId})
+  console.log('deleteOne Res', deleteRes) // it should be an query object
+
+  // 7. update my company record
+  let i = myCompany.clients.length
+
+  while(i--) {
+    if (myCompany.clients[i].toString() === clientId) {
+      myCompany.clients.splice(i, 1)
+    }
+  }
+  await myCompany.save()
+
   return  {
     _id: clientId,
     count: 1,
     message: 'Client deleted'
   }
+
 }
 
 
