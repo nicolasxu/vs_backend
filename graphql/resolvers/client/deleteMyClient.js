@@ -74,7 +74,7 @@ async function deleteMyClient(obj, args, context, info) {
 
   // 6. delete this company by clientId
   let deleteRes = await Company.deleteOne({_id: clientId})
-  console.log('deleteOne Res', deleteRes) // it should be an query object
+  // console.log('deleteOne Res', deleteRes) // it should be an query object
 
   // 7. update my company record
   let i = myCompany.clients.length
@@ -88,7 +88,7 @@ async function deleteMyClient(obj, args, context, info) {
 
   return  {
     _id: clientId,
-    count: 1,
+    count: deleteRes.result.n, //  {n: 1, ok: 1},
     message: 'Client deleted'
   }
 

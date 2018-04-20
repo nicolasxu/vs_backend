@@ -11,8 +11,8 @@ async function severClientRelationship(obj, args, context, info) {
   const userId = store.getUserId()
 
   // 1. client id exists
-  let clientId = args.clientId
-  if (clientId) {
+  let clientId = args.id
+  if (!clientId) {
     return {
       err_code: 4000, 
       err_msg: 'ClientId is empty'
@@ -63,7 +63,8 @@ async function severClientRelationship(obj, args, context, info) {
   }
 
   // 5. update my company
-  await myCompany.clients.splice(clientIndex, 1)
+  myCompany.clients.splice(clientIndex, 1)
+  await myCompany.save()
 
   // 6. update vendors in client company
   let vendors = thisClient.vendors

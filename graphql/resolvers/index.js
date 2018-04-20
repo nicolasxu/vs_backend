@@ -7,6 +7,7 @@ const getCompanyByEmail = require('./company/getCompanyByEmail.js')
 const createMyClient = require('./client/createMyClient.js')
 const deleteMyClient = require('./client/deleteMyClient.js')
 const updateMyClient = require('./client/updateMyClient.js')
+const severClientRelationship = require('./client/severClientRelationship.js')
 
 const myClients = require('./client/listMyClients.js')
 const getMyClientDetail = require('./client/getMyClientDetail.js')
@@ -74,6 +75,7 @@ let resolver = {
     deleteMyClient: deleteMyClient,
     updateMyClient: updateMyClient,
 
+    severClientRelationship: severClientRelationship,
     severVendorRelationship: severVendorRelationship,
 
     createRequest: createRequest,
