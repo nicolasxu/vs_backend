@@ -199,7 +199,34 @@ companySchema.statics.findUserCompany = async function(userId) {
 	let Company = this.model('Company')
 
 	return Company.findOne({members: {'$in': [userId]}, creatorCompanyId: null })
+	// you can not use .lean() on this returned value, since .lean() is a method of Query object, 
+	// Here .findOne() returns a mongoose model instance(document object), not a Query object. 
+	// To get JSON from a document oject, you need to call .toJSON() method. 
+
 	// return a model instance
+
+	// find() return a Query object
+	// findOne() return a Document object
+
+}
+
+companySchema.methods.PickPublicFields = function () {
+	let res = {}
+	res.name = this.name
+	res.addressLine1 = this.addressLine1
+	res.addressLine2 = this.addressLine2
+	res.city = this.city
+	res.state = this.state
+	res.zip = this.zip
+	res.country = this.country
+	res.tel = this.tel
+	res.website = this.website
+	res.serviceDesc = this.serviceDesc
+	res.created = this.created
+	res.updated = this.updated
+	res.invoicePersonName = this.invoicePersonName
+
+	return res
 }
 
 companySchema.statics.addClient = async function(toCid, clientId ) {

@@ -38,17 +38,23 @@ async function getCompanyByEmail(obj, args, context, info) {
   }
 
   // 4. find company with this user id
+  // Company.findUserCompany return a mongoose model, not a JSON object
   let company = await Company.findUserCompany(user._id)
+  console.log('company result', company)
   if (!company) {
     return {
       err_code: 4003,
       err_msg: 'Can not find company'
     }
   }
-  const {invoiceEmails, invoicePersonName, members, 
-    vendors, clients, templates, ...partialCompany  } = company
   
-  return partialCompany
+  delete company.clients
+  delete company.vendors
+  delete company.creatorCompanyId
+  delete company.members
+  delete company.invoiceEmails
+
+  return company
 
 }
 
