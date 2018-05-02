@@ -31,10 +31,7 @@ async function getCompanyByEmail(obj, args, context, info) {
   // 3. find user by email
   let user = await User.findOne({email: email, active: true })
   if (!user) {
-    return {
-      err_code: 4002,
-      err_msg: 'Can not find company with this user email'
-    }
+    return {}
   }
 
   // 4. find company with this user id
@@ -42,10 +39,7 @@ async function getCompanyByEmail(obj, args, context, info) {
   let company = await Company.findUserCompany(user._id)
   console.log('company result', company)
   if (!company) {
-    return {
-      err_code: 4003,
-      err_msg: 'Can not find company'
-    }
+    return {}
   }
   
   delete company.clients
