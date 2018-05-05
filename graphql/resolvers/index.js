@@ -19,6 +19,7 @@ const severVendorRelationship = require('./vendor/severVendorRelationship.js')
 
 const createRequest = require('./request/createRequest.js')
 const approveRequest = require('./request/apporveRequest.js')
+const withdrawRequest = require('./request/withdrawRequest.js')
 const rejectRequest = require('./request/rejectRequest.js')
 const deleteRequest = require('./request/deleteRequest.js')
 const sentRequest = require('./request/sentRequests.js')
@@ -80,6 +81,7 @@ let resolver = {
 
     createRequest: createRequest,
     approveRequest: approveRequest,
+    withdrawRequest: withdrawRequest,
     rejectRequest: rejectRequest,
     deleteRequest: deleteRequest,
 

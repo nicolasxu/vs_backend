@@ -204,9 +204,9 @@ companySchema.statics.findUserCompany = async function(userId) {
 	// To get JSON from a document oject, you need to call .toJSON() method. 
 
 	// return a model instance
-
-	// find() return a Query object
-	// findOne() return a Document object
+	// in mongoose 5.0.17
+	// Model.find() return a Query object
+	// Model.findOne() return a Query object
 
 }
 

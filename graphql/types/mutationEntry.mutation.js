@@ -16,6 +16,7 @@ type Mutation {
   createRequest(toEmail: String, toIs: String): Request
   approveRequest(requestId: String): Request
   rejectRequest(requestId: String): Request
+  withdrawRequest(requestId: String): Request
   deleteRequest(requestId: String): Request
 
   createTemplate(input: TemplateInput): Template

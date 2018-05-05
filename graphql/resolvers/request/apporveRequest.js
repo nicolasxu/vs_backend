@@ -46,7 +46,7 @@ async function approveRequest(obj, args, context, info) {
 
   // update client and vendor
   try {
-    await Company.addClient(updatedRequest.vendor_company_id, updatedRequest.client_company_id)    
+    await Company.addClient(updatedRequest.vendor_company_id /* toCid */, updatedRequest.client_company_id)    
   } catch (e) {
     return {
       err_code: 4004,
@@ -55,7 +55,7 @@ async function approveRequest(obj, args, context, info) {
   }
   
   try {
-    await Company.addVendor(updatedRequest.client_company_id , updatedRequest.vendor_company_id )
+    await Company.addVendor(updatedRequest.client_company_id /* toCid */ , updatedRequest.vendor_company_id )
   } catch (e) {
     return {
       err_code: 4005,

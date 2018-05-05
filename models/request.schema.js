@@ -75,7 +75,7 @@ requestSchema.statics.createRequest = async function (fromCompany, toCompany, cl
     client_company_id: clientCid,
     vendor_company_id: vendorCid,
 
-    status: 'pending'
+    status: 'pending' // 'rejected', 'approved', 'withdrawn'
   }
 
   let existingRequest = await this.isRequestExist(fromCompany, toCompany, clientCid, vendorCid)
@@ -118,7 +118,7 @@ requestSchema.statics.isRequestExist = async function (fromCompany, toCompany, c
 
 
 requestSchema.statics.rejectRequest = function (requestId, toCompanyId) {
-  // valid
+  
   if (!requestId || !toCompanyId) {
     return null
   }

@@ -41,7 +41,7 @@ async function deleteTemplate(obj, args, context, info) {
     }
   }
 
-  // todo: check tid validity
+  // 4. check tid validity
   let isTidValid = mongoose.Types.ObjectId.isValid(templateId)
   if (!isTidValid) {
     return {
@@ -50,7 +50,7 @@ async function deleteTemplate(obj, args, context, info) {
     }
   }
 
-  // 3. tid in company.templates
+  // 5. tid in company.templates
   let myTemplates = myCompany.templates
   let isMyTemplate = false
   for(let i = 0; i < myTemplates.length; i++) {
