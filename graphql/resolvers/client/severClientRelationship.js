@@ -62,9 +62,8 @@ async function severClientRelationship(obj, args, context, info) {
     }
   }
 
-  // 5. update my company
-  myCompany.clients.splice(clientIndex, 1)
-  await myCompany.save()
+  // 5. update my company  
+  await myCompany.update({$pullAll: {clients: [clientId]}})
 
   // 6. update vendors in client company
   let vendors = thisClient.vendors
