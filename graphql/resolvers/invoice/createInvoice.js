@@ -11,6 +11,7 @@ const Invoice = require('../../../models').Invoice
 const _ = require('lodash')
 const intStrToDateStr = require('../../../utils/intStrToDateStr.js')
 const renderInvoice = require('../../../utils/renderInvoice.js')
+const sendEmail = require('../../../utils/sendEmail.js')
 
 module.exports = createInvoice
 
@@ -84,12 +85,22 @@ async function createInvoice(obj, args, context, info) {
       err_msg: 'Can not find to company in your client list'
     }
   }
+
+  // 7. toCompany invoiceEmails exists
+  if (!toCompanyRaw.invoiceEmails || 
+    !Array.isArray(toCompanyRaw.invoiceEmails) || 
+    toCompanyRaw.invoiceEmails.length === 0 ) {
+    return {
+      err_code: 4008,
+      err_msg: 'To company notification email is empty'
+    }
+  }
   
   // 7. template exists
   let template = await Template.findOne({_id: templateId})
   if (!template) {
     return {
-      err_code: 4008,
+      err_code: 4009,
       err_msg: 'Can not find template by templateId'
     }
   }
@@ -106,8 +117,6 @@ async function createInvoice(obj, args, context, info) {
     currentNumber = maxNumInv.number + 1
   }
 
-  // console.log(maxNumInv)
-
   // 8. parse json dasta
   let items 
   let customData
@@ -115,7 +124,7 @@ async function createInvoice(obj, args, context, info) {
     items = JSON.parse(args.input.items)
   } catch (e) {
     return {
-      err_code: 4009,
+      err_code: 4010,
       err_msg: 'Parse items data error'
     }
   }
@@ -127,7 +136,7 @@ async function createInvoice(obj, args, context, info) {
     
   } catch (e) {
     return {
-      err_code: 4010,
+      err_code: 4011,
       err_msg: 'Parsing customData error'
     }
   }
@@ -155,7 +164,7 @@ async function createInvoice(obj, args, context, info) {
   } catch (e) {
     console.log('render invoice error', e)
     return {
-      err_code: 4011,
+      err_code: 4012,
       err_msg: 'Render invoice error, invoice is not sent'
     }
   }
@@ -196,6 +205,18 @@ async function createInvoice(obj, args, context, info) {
     - send Websocket message
 
   */
+  // send email
+  let appDomain = store.getDomainName()
+  let viewInvoicePath = '/v' + '/' + dbData.viewId
+
+  sendEmail('receive_invoice', {
+    invoice_number: dbData.number,
+    to_company_name: dbData.toCompany.name,
+    from_company_name: dbData.fromCompany.name,
+    invoice_url: appDomain + viewInvoicePath,
+    total_amount: dbData.total,
+    due_date: dbData.dueDate
+  }, toCompanyRaw.invoiceEmails )
 
   // 12. return data
 

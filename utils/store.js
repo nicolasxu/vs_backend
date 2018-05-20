@@ -4,6 +4,10 @@ module.exports = {
     let userId = this.user && this.user._id
     return userId
   },
+  getEmail: function () {
+    let email = this.user && this.user.email
+    return email
+  },
   getUserFullname: function () {
     if (!this.user) {
       throw new Error('User object does not exist in store')

@@ -24,7 +24,7 @@ async function createMyClient(obj, args, context, info) {
   }
 
   //3. only take one email, the rest is discarded...
-  let clientEmail = args.input.invoiceEmails[0]
+  let clientEmail = args.input.invoiceEmails && args.input.invoiceEmails[0]
   if (!clientEmail) {
     return {
       err_code: 4002,

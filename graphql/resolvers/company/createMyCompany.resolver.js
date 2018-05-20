@@ -17,6 +17,17 @@ async function createMyCompany(obj, args, context, info) {
 
   let company = args.input
   company.members = [userId]
+  let userEmail = store.getEmail()
+  if (company.invoiceEmails && company.invoiceEmails.length > 0) {
+    let emailStr = company.invoiceEmails.join('||')
+    if (emailStr.indexOf(userEmail) > -1) {
+      // nothing
+    } else {
+      company.invoiceEmails.push(userEmail)
+    }
+  } else {
+    company.invoiceEmails = [userEmail]
+  }
 
   let result = await Company.createMyCompany(company)
 
