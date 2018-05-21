@@ -1,0 +1,27 @@
+when user(not registered) receives invoice in email, 
+   after this user fill pwd, bank account, and click pay
+ - make this user the owner of the client company
+ - search company by user email, replace current private company with user's new company
+ - go through invoice collection, change all previous privte company to this new one. 
+
+
+This only happen once when new user paying invoice. If they pay they become the live user.
+
+
+
+
+----------------------------
+
+
+
+1) registered/unregistered user receive link to invoice in email
+   domain.com/#/i/xxx-xxx-xxx-xxx
+   1. user click the link to view invoice in web app (no authentication required)
+      - call back-end api by viewId to see if to_company is a live company. If not, don't display login.
+        display pay button in header always. 
+        If to_company is live company, try automatically login based on jwt token in localstorage
+              - if login success, redirect to received invoice with this invoice shown. 
+              - if login failed, display login link in header, user click the link to redirect to web app login page. 
+                click 'pay' will trigger a login route redirect, if login success, redirect back to received invoice with this invoice shown. 
+        If to_company is not a live company, 'pay' will trigger a model dialog for password, and bank account, then confirm pay. 
+        if pay is success submitted, do line 1 - 8.
