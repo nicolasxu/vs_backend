@@ -2,6 +2,7 @@
 const invoicePdf = require('./invoicePdf.js')
 const store = require('../../utils/store.js')
 const verifyToken = require('../../utils/verifyToken.js')
+const getInvoiceByViewId = require('./getInvoiceByViewId.js')
 
 module.exports = {
   mountTo: mountRoutes
@@ -10,4 +11,5 @@ module.exports = {
 
 function mountRoutes(router) {
   router.get('/api/invoicepdf/:viewid', invoicePdf)
+  router.get('/api/invoice/:viewid', getInvoiceByViewId)
 }
