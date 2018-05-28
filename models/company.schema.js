@@ -45,31 +45,30 @@ var companySchema = new Schema ({
 });
 
 // Can only be used to create my own company, not client or vendor
-companySchema.statics.createMyCompany = async function (companyJson) {
-
-	if (!companyJson.members || companyJson.members.length < 1) {
+companySchema.statics.createMyCompany = async function (userId, companyName) {
+	
+	if (!userId || !companyName) {
 		return
 	}
-	let userId = companyJson.members[0]
 
 	// 1. check if user is in other company
 	let isInOtherCompany = await this.isUserInOtherCompany(userId)
 
 	if (isInOtherCompany) {
-		return 'COMPANY EXIST'
+		return null
 	}
 
 	// create company
 	var Company = this.model('Company')
-	//	var userOid = new ObjectId(userId)
-	
-	// companyJson.members = [userId];
+	let companyJson = {}
+	companyJson.members = [userId];
 	companyJson.active = true;
+	companyJson.name = companyName
 
 	// Use object string string when type is ObjectId, the string will be coerced to Object ID in mongoDB,
 	// if you use a object id type, which is a json object, there will be a validation error
 	// debug
-	var invoiceTemplateId = '579572800d8bb41654d00b44' //new ObjectId('579572800d8bb41654d00b44') 
+	var invoiceTemplateId = '5abd6af947b16df488cb1de9' //new ObjectId('579572800d8bb41654d00b44') 
 	// TODO: there could be 2 default invoice templates
 	//       or premium user will have its own customized templates
 	companyJson.templates = [invoiceTemplateId];

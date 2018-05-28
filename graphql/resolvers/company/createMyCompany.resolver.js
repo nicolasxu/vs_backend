@@ -5,7 +5,7 @@ module.exports = createMyCompany
 
 
 async function createMyCompany(obj, args, context, info) {
-
+  return;
   let userId = store.getUserId()
 
   if (!userId) {
