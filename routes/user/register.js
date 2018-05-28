@@ -10,31 +10,70 @@ module.exports = registerUser
 
 async function registerUser(req, res, next) {
 
-  var userJson = {email: req.body.email, password: req.body.password}
+  var userJson = {
+    email: req.body.email, 
+    password: req.body.password, 
+    companyName: req.body.companyName
+  }
   console.log(userJson)
   // 1. validate email
   if(!User.isEmailValid(userJson.email)) {
-    res.status(200).json(messages.invalidEmail);
-    return;
+    return res.status(200).json({
+      data: {
+        register: {
+          err_code: 4000,
+          err_msg: 'email is not valid'
+        }
+      }
+    })
   }
   // 2. validate password
   if(!User.isPasswordValid(userJson.password)) {
-    res.status(200).json(messages.weakPassword);
-    return;
+    return res.status(200).json({
+      data: {
+        register: {
+          err_code: 4001,
+          err_msg: 'Weak password'
+        }        
+      }
+    })
+  }
+
+  if (!userJson.companyName) {
+    return res.status(200).json({
+      data: {
+        register: {
+          err_code: 4002,
+          err_msg: 'Company name is empty'
+        }        
+      }
+    })
   }
 
   // 3. is registered
   let isRegistered = await User.isRegistered(userJson.email)
   if (isRegistered) {
-    res.status(200).json(messages.accountExist)
-    return
+    return res.status(200).json({
+      data: {
+        register: {
+          err_code: 4003,
+          err_msg: 'email is used by other account'
+        }
+      }
+    })  //messages.accountExist)
   }
 
   // 4. create User
   let createRes = await User.createUser(userJson)
   if (createRes.ok !== 1 && createRes.n !== 1) {
-    res.status(200).json(messages.createUserError)
-    return
+    return res.status(200).json({
+      data: {
+        register: {
+          err_code: 4004,
+          err_msg: 'Create user error'
+        }
+      }
+    })
   }
 
   // 5. get created user
@@ -48,15 +87,22 @@ async function registerUser(req, res, next) {
     userJson.email)
 
   // 6. return created user without password, verification hash
-  let returnJson = _.cloneDeep(messages.createUserSuccess)
-  returnJson.data.user = {
-    _id: newUser._id,
-    email: newUser.email, 
-    role: newUser.role,
-    active: newUser.active,
-    firstName: newUser.firstName,
-    lastName: newUser.lastName,    
-  }
-  res.status(200).json(returnJson)
-
+  return res.status(200).json({
+    data: {
+      register: {
+        err_code: null,
+        err_msg: null,
+        user: {
+          _id: newUser._id,
+          email: newUser.email,
+          companyName: newUser.companyName,
+          companyId: newUser.companyId,
+          role: newUser.role,
+          active: newUser.active,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,         
+        }
+      }      
+    }
+  })
 }

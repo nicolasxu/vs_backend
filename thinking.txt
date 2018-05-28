@@ -1,5 +1,6 @@
 when user(not registered) receives invoice in email, 
-   after this user fill pwd, bank account, and click pay
+  1) ask user's email for confirmation, it must match one of the email in toCompany, unless toCompany doesn't exist 
+  2) user fill pwd, bank account, and click pay
  - make this user the owner of the client company
  - search company by user email, replace current private company with user's new company
  - go through invoice collection, change all previous privte company to this new one. 

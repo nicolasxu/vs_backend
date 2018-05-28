@@ -11,6 +11,9 @@ var mongoosePaginate = require('mongoose-paginate')
 var userSchema = new Schema ({
 	email: String, 
 	password: String,
+	companyName: String,
+	companyId: ObjectId, // one user can only belong to one company only,
+	                     // after success email verification, a company is created automatically
 	role: String,
 	active: Boolean,
 	firstName: String,
@@ -59,6 +62,7 @@ userSchema.statics.isPasswordValid = function (password) {
 }
 
 userSchema.statics.createUser = async function (userInput) {
+	console.log('create user is called...')
 	// only safe to run after making sure it is new user, 
 	// or it will overwrite existing user.
 	var user = _.clone(userInput)

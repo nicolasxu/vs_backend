@@ -27,7 +27,7 @@ var companySchema = new Schema ({
 	serviceDesc: String,
 	created: String,
 	updated: String,
-	invoiceEmails: [String], // notification email address
+	invoiceEmails: [String], // notification email address, if it is private company, only one is allowed
 	invoicePersonName: String, // person will be responsible for receiving and paying invoice in this company
 	members: {
 		type: [ObjectId],
