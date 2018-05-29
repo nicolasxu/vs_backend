@@ -38,7 +38,7 @@ async function registerUser(req, res, next) {
       }
     })
   }
-
+  // 3. validate company name
   if (!userJson.companyName) {
     return res.status(200).json({
       data: {

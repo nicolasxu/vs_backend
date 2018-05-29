@@ -10,7 +10,7 @@ let user2
 let user3
 
 
-
+/*
 describe('Test replace privete company with newly created company based on same email', function() {
 
   before( async function () {
@@ -47,3 +47,5 @@ describe('Test replace privete company with newly created company based on same 
     db.close(()=> {})
   })
 });
+
+*/

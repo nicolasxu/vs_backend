@@ -12,7 +12,7 @@ var userSchema = new Schema ({
 	email: String, 
 	password: String,
 	companyName: String,
-	companyId: ObjectId, // one user can only belong to one company only,
+	myCompanyId: ObjectId, // one user can only belong to one company only,
 	                     // after success email verification, a company is created automatically
 	role: String,
 	active: Boolean,

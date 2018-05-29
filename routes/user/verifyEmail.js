@@ -35,7 +35,7 @@ async function verifyEmail(req, res, next) {
     })
   }
 
-  // todo: create company
+  // create company
   let myCompany = await Company.createMyCompany(userDoc._id, userDoc.companyName || (userDoc.email + ' Company') )
   if (!myCompany) {
     return res.status(200).json({

@@ -34,11 +34,14 @@
     "mongoose": "^5.0.17",
     "mongoose-paginate": "^5.0.3",
     "morgan": "~1.7.0",
+    "node-fetch": "^2.1.2",
     "nodemailer": "^4.6.4",
     "sanitizer": "^0.1.3",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^5.2.0"
   }
 }
