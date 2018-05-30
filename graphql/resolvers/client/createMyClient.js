@@ -32,11 +32,19 @@ async function createMyClient(obj, args, context, info) {
     }
   }
 
+  let clientName = args.input.name
+  if (!clientName) {
+    return {
+      err_code: 4003,
+      err_msg: 'Client company name is empty'
+    }
+  }
+
   // 4. make sure client email does not belong to any active company
   let isRegistered = await User.isRegistered(clientEmail)
   if (isRegistered) {
     return {
-      err_code: 4003,
+      err_code: 4004,
       err_msg: 'email belongs to registered user, can not create private with this email.'
     }
   }
@@ -45,7 +53,7 @@ async function createMyClient(obj, args, context, info) {
   let isUsed = await myCompany.isEmailInPrivateClients(clientEmail)
   if (isUsed) {
     return {
-      err_code: 4004,
+      err_code: 4005,
       err_msg: 'Email used by other private client'
     }
   }
@@ -65,7 +73,7 @@ async function createMyClient(obj, args, context, info) {
     clientCreated = await Company.create(client)
   } catch (e) {
     return {
-      err_code: 4005,
+      err_code: 4006,
       err_msg: 'client object may contain unsupported fields'
     }
 

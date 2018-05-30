@@ -93,6 +93,8 @@ describe('Test replace privete company with newly created company based on same 
     await User.findOneAndRemove({_id: user._id})
 
 
-    db.close(()=> {})
+    db.close(()=> {
+      console.log('db connection closed...')
+    })
   })
 });

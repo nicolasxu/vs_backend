@@ -10,7 +10,7 @@ const email = new Email({
     from: 'xu.shenxin@gmail.com' // replace with support email in production
 
   },
-  send: true,  // if send email for real
+  send: false,  // if send email for real
   preview: false, // if open rendered email in browser
   transport: emailSecret, 
   views: {
