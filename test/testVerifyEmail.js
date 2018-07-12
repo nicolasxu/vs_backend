@@ -53,9 +53,7 @@ describe('Test replace privete company with newly created company based on same 
         headers: {'Content-Type': 'application/json'}
       })
       let resJson = await res.json()
-      // console.log('resJson', resJson)
 
-      // console.log('resJson.data.verifyEmail', resJson.data.verifyEmail)
       assert.equal(resJson.data.verifyEmail.err_code, null, 'no error code')
 
 

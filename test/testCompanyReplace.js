@@ -15,7 +15,7 @@ let user3
 let client1Id
 
 
-describe.only('Test replace privete company with newly created company based on same email', function() {
+describe('Test replace privete company with newly created company based on same email', function() {
 
   before( async function () {
     
@@ -108,7 +108,7 @@ describe.only('Test replace privete company with newly created company based on 
     //   method: 'POST',
     //   body: JSON.stringify(payload12),
     //   headers:  {'Content-Type': 'application/json'}
-    // })    
+    // })
 
  
   })

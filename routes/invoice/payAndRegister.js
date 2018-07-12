@@ -6,10 +6,11 @@ module.exports = payAndRegister
 
 async function payAndRegister(req, res, next) {
 
-  let email = req.body.email
+  let email = req.body.email? req.body.email.trim(): ''
   let routingNumber = req.body.routingNumber
   let bankAccountNumber = req.body.bankAccount
   let invoiceViewId = req.body.viewId
+  let password = req.body.password
 
   // 1. Validation
   if (!email) {
@@ -106,20 +107,51 @@ async function payAndRegister(req, res, next) {
     })
   }
 
-  // 4. email belong to toCompany
+  // 4. toCompany exists
+  let toCompanyId = invoice.toCompany.companyId
+  let toCompany = await Company.findOne({_id: toCompanyId})
 
-  /* 5. email does not belong to live company
-      email can belong to a live company:
-      A company sent invoice to B company (private),
-      Then a user use toCompany email to create a live company
-      
+  if (!toCompany) {
+    return res.status(200).json({
+      data: {
+        payAndRegister: {
+          err_code: 4008,
+          err_msg: 'Can not find email receiving company'
+        }        
+      }
+    })    
+  }
 
-  */
-  // 
+  // 5. email belongs to toCompany
+  let toEmail = toCompany.invoiceEmails[0] ? toCompany.invoiceEmails[0].trim(): ''
 
+  if (toEmail !== toEmail) {
+    return res.status(200).json({
+      data: {
+        payAndRegister: {
+          err_code: 4009,
+          err_msg: 'Email does not match to company email'
+        }        
+      }
+    })
+  }
 
+  // 6. toCompany is not private company (this api is only for 1st time payer)
+  if (!toCompany.creatorCompanyId) {
+    return res.status(200).json({
+      data: {
+        payAndRegister: {
+          err_code: 4010,
+          err_msg: 'email receiving company is not an active company'
+        }        
+      }
+    })    
+  }
 
-
+  // todo:
+  // - change existing company records
+  // - change existing invoice records
+  // - call payment api to pay the invoice
 
 
 
